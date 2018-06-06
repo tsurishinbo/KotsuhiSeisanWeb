@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:composition template="./templates/template.xhtml">
+        <ui:define name="content">
+            <f:metadata>
+                <f:viewAction action="#{searchView.doLoginCheck()}" />
+            </f:metadata>
+            <p:panelGrid columns="2">
+                <p:outputLabel value="申請日" />
+                <h:panelGroup>
+                    <p:calendar id="apply_date_from" value="#{searchView.applyDateFrom}" locale="ja" pattern="yyyy/MM/dd">
+                        <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
+                    </p:calendar>
+                    ～
+                    <p:calendar id="apply_date_to" value="#{searchView.applyDateTo}" locale="ja" pattern="yyyy/MM/dd">
+                        <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
+                    </p:calendar>
+                    <p:message for="apply_date_from" />
+                    <p:message for="apply_date_to" />
+                </h:panelGroup>
+                <p:outputLabel for="apply_id" value="申請者" />
+                <h:selectOneMenu id="apply_id" style="width:150px" value="#{searchView.applyId}">
+                    <f:selectItems value="#{searchView.applyList}" />
+                </h:selectOneMenu>
+                <p:outputLabel for="approve_id" value="承認者" />
+                <h:selectOneMenu id="approve_id" style="width:150px" value="#{searchView.approveId}">
+                    <f:selectItems value="#{searchView.approveList}" />
+                </h:selectOneMenu>
+                <p:outputLabel for="status" value="ステータス" />
+                <h:selectOneRadio id="status" value="#{searchView.status}">
+                    <f:selectItem itemValue="0" itemLabel="すべて" />
+                    <f:selectItem itemValue="1" itemLabel="未申請" />
+                    <f:selectItem itemValue="2" itemLabel="承認待ち" />
+                    <f:selectItem itemValue="3" itemLabel="承認済" />
+                    <f:selectItem itemValue="4" itemLabel="差戻し" />
+                </h:selectOneRadio>
+            </p:panelGrid>
+            <p />
+            <p:commandButton value="検索" ajax="false" action="#{searchView.doSearch()}" />
+            <p:separator />
+            <ui:fragment rendered="#{searchView.applicationList.size() > 0}">
+                <p:dataTable id="applicationList" var="app" value="#{searchView.applicationList}">
+                    <p:column id="colId" headerText="申請ID">
+                        <h:outputText value="#{app.id}" />
+                    </p:column>
+                    <p:column id="colStatus" headerText="ステータス">
+                        <h:outputText value="未申請" rendered="#{app.status == 1}" />
+                        <h:outputText value="承認待ち" rendered="#{app.status == 2}" />
+                        <h:outputText value="承認済" rendered="#{app.status == 3}" />
+                        <h:outputText value="差戻し" rendered="#{app.status == 4}" />
+                    </p:column>
+                </p:dataTable>
+            </ui:fragment>
+        </ui:define>
+    </ui:composition>
+</html>

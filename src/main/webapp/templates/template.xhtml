@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet library="css" name="kotsuhi.css" />
+        <title>交通費精算システム</title>
+    </h:head>
+    <h:body>
+        <h:form prependId="false">
+            <div id="main">
+                <div id="header">
+                    <h4>交通費精算システム</h4>
+                    <h:outputLabel for="emp_no" value="社員番号:" />
+                    <h:outputText id="emp_no" value="#{topView.session.empNo}" />
+                    <h:outputLabel for="emp_name" value="／氏名:" />
+                    <h:outputText id="emp_name" value="#{topView.session.empName}" />
+                    <h:outputText value="(管理職)" rendered="#{topView.session.manager}" style="color:#ff0000;" />
+                    <h:outputLabel for="boss_name" value="／上司:" rendered="#{topView.session.bossId != null}" />
+                    <h:outputText id="boss_name" value="#{topView.session.bossName}" rendered="#{topView.session.bossId != null}" />
+                    <p:separator />
+                </div>
+                <div id="menu">
+                    <p:commandButton styleClass="menubutton" value="トップ" ajax="false" action="#{topView.doTop()}"  />
+                    <p:commandButton styleClass="menubutton" value="申請検索" ajax="false" action="#{topView.doSearch()}" />
+                    <p:commandButton styleClass="menubutton" value="申請作成" ajax="false" action="#{topView.doMake()}" />
+                    <p:commandButton styleClass="menubutton" value="申請承認" ajax="false" action="#{topView.doApprove()}" rendered="#{topView.session.manager}" />
+                    <p:commandButton styleClass="menubutton" value="ログアウト" ajax="false" action="#{topView.doLogout()}" />
+                </div>
+                <div id="content">
+                    <ui:insert name="content" />
+                </div>
+            </div>
+        </h:form>
+    </h:body>
+</html>
+

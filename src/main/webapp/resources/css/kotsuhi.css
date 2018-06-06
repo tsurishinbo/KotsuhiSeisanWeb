@@ -1,0 +1,44 @@
+#main {
+    width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#header {
+    width: 1000px;
+    height: 80px;
+}
+
+#menu {
+    width: 120px;
+    margin-top: 10px;
+    float: left;
+}
+
+#content {
+    width: 880px;
+    margin-top: 10px;
+    float: right;
+}
+
+.menubutton {
+    width: 100px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.status_header {
+    width: 80px;
+    font-weight: bold;
+    text-align: center;
+    background-color: #f0f8ff;
+}
+
+.status_value {
+    width: 80px;
+    text-align: center;
+}
+
+.message {
+    color: #ff0000;
+}

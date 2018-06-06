@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:composition template="./templates/template.xhtml">
+        <ui:define name="content">
+            <f:metadata>
+                <f:viewAction action="#{topView.doLoginCheck()}" />
+            </f:metadata>
+            <p:outputPanel styleClass="message">
+                <h:outputText value="#{topView.message}" />
+            </p:outputPanel>
+            <p:outputLabel for="email" value="メールアドレス:" />
+            <p:inputText id="email" value="#{topView.session.email}" size="40" />
+            <p:commandButton value="登録" ajax="false" action="#{topView.doChangeEmail()}" />
+            <p />
+            <p:panelGrid>
+                <p:row>
+                    <p:column styleClass="status_header">未申請</p:column>
+                    <p:column styleClass="status_header">承認待ち</p:column>
+                    <p:column styleClass="status_header">承認済</p:column>
+                    <p:column styleClass="status_header">差戻し</p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="status_value"><h:outputText value="#{topView.cntSave}" /></p:column>
+                    <p:column styleClass="status_value"><h:outputText value="#{topView.cntWait}" /></p:column>
+                    <p:column styleClass="status_value"><h:outputText value="#{topView.cntApproved}" /></p:column>
+                    <p:column styleClass="status_value"><h:outputText value="#{topView.cntRejected}" /></p:column>
+                </p:row>
+            </p:panelGrid>
+        </ui:define>
+    </ui:composition>
+</html>
