@@ -1,5 +1,6 @@
 package jp.co.stcinc.kotsuhiseisan.view;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -19,6 +20,12 @@ public class LoginView extends AbstractView {
     @EJB
     private MEmployeeFacade mEmployeeFacade;
 
+    @PostConstruct
+    @Override
+    public void init() {
+        session.logout();
+    }
+    
     public String doLogin() {
         MEmployee mEmployee = mEmployeeFacade.find(empNo, password);
         if (mEmployee != null) {
@@ -26,8 +33,9 @@ public class LoginView extends AbstractView {
                     mEmployee.getEmployeeName(),
                     mEmployee.getBossId(), 
                     (mEmployee.getBossId() != null ? mEmployee.getBoss().getEmployeeName(): null),
-                    mEmployee.getEmail(),
-                    mEmployee.getManager() == 1
+                    mEmployee.getIsBoss() == 1,
+                    mEmployee.getIsManager() == 1,
+                    mEmployee.getEmail()
             );
             return "top.xhtml?faces-redirect=true";
         } else {

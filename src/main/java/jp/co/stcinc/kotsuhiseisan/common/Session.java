@@ -17,47 +17,40 @@ public class Session implements Serializable {
     @Getter @Setter
     private String bossName;
     @Getter @Setter
-    private String email;
+    private boolean isBoss;
     @Getter @Setter
     private boolean isManager;
     @Getter @Setter
+    private String email;
+    @Getter @Setter
     private boolean isAuth;
 
-    /**
-     * 
-     * @param empNo
-     * @param empName
-     * @param bossId
-     * @param bossName
-     * @param email 
-     * @param isManager 
-     */
     public void login(
             final Integer empNo, 
             final String empName, 
             final Integer bossId, 
             final String bossName, 
-            final String email, 
-            final boolean isManager) {
+            final boolean isBoss,
+            final boolean isManager,
+            final String email) {
         this.empNo = empNo;
         this.empName = empName;
         this.bossId = bossId;
         this.bossName = bossName;
-        this.email = email;
+        this.isBoss = isBoss;
         this.isManager = isManager;
         this.isAuth = true;
+        this.email = email;
     }
 
-    /**
-     * 
-     */
     public void logout() {
         this.empNo = null;
         this.empName = null;
         this.bossId = null;
         this.bossName = null;
-        this.email = null;
+        this.isBoss = false;
         this.isManager = false;
         this.isAuth = false;
+        this.email = null;
     }
 }

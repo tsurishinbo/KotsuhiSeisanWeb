@@ -16,24 +16,22 @@ import lombok.Setter;
 public class TopView extends AbstractView {
 
     @Getter @Setter
-    private Long cntSave;
+    private Long cntWaitBoss;
     @Getter @Setter
-    private Long cntWait;
+    private Long cntWaitManager;
     @Getter @Setter
-    private Long cntApproved;
-    @Getter @Setter
-    private Long cntRejected;
+    private Long cntWaitPayment;
     @EJB
     private TApplicationFacade tApplicationFacade;
     @EJB
     private MEmployeeFacade mEmployeeFacade;
     
     @PostConstruct
+    @Override
     public void init() {
-        cntSave = tApplicationFacade.getCountByStatus(session.getEmpNo(), Constant.STATUS_SAVE);
-        cntWait = tApplicationFacade.getCountByStatus(session.getEmpNo(), Constant.STATUS_WAIT);
-        cntApproved = tApplicationFacade.getCountByStatus(session.getEmpNo(), Constant.STATUS_APPROVED);
-        cntRejected = tApplicationFacade.getCountByStatus(session.getEmpNo(), Constant.STATUS_REJECTED);
+        cntWaitBoss = tApplicationFacade.getCountByStatus(session.getEmpNo(), Constant.STATUS_WAIT_BOSS);
+        cntWaitManager = tApplicationFacade.getCountByStatus(session.getEmpNo(), Constant.STATUS_WAIT_MANAGER);
+        cntWaitPayment = tApplicationFacade.getCountByStatus(session.getEmpNo(), Constant.STATUS_WAIT_PAYMENT);
     }
     
     public String doChangeEmail() {
@@ -56,7 +54,23 @@ public class TopView extends AbstractView {
         return null;
     }
     
-    public String doApprove() {
+    public String doBossApprove() {
+        return null;
+    }
+    
+    public String doManagerApprove() {
+        return null;
+    }
+    
+    public String doPayment() {
+        return null;
+    }
+    
+    public String doReport() {
+        return null;
+    }
+    
+    public String doMonthly() {
         return null;
     }
     

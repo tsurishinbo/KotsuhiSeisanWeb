@@ -14,21 +14,19 @@
                 <h:outputText value="#{topView.message}" />
             </p:outputPanel>
             <p:outputLabel for="email" value="メールアドレス:" />
-            <p:inputText id="email" value="#{topView.session.email}" size="40" />
-            <p:commandButton value="登録" ajax="false" action="#{topView.doChangeEmail()}" />
+            <h:outputText id="email" value="#{topView.session.email}" />
+            <p:commandButton value="変更" ajax="false" action="#{topView.doChangeEmail()}" style="margin-left:10px;" />
             <p />
             <p:panelGrid>
                 <p:row>
-                    <p:column styleClass="status_header">未申請</p:column>
-                    <p:column styleClass="status_header">承認待ち</p:column>
-                    <p:column styleClass="status_header">承認済</p:column>
-                    <p:column styleClass="status_header">差戻し</p:column>
+                    <p:column styleClass="status_header">上司承認待ち</p:column>
+                    <p:column styleClass="status_header">管理部承認待ち</p:column>
+                    <p:column styleClass="status_header">支払待ち</p:column>
                 </p:row>
                 <p:row>
-                    <p:column styleClass="status_value"><h:outputText value="#{topView.cntSave}" /></p:column>
-                    <p:column styleClass="status_value"><h:outputText value="#{topView.cntWait}" /></p:column>
-                    <p:column styleClass="status_value"><h:outputText value="#{topView.cntApproved}" /></p:column>
-                    <p:column styleClass="status_value"><h:outputText value="#{topView.cntRejected}" /></p:column>
+                    <p:column styleClass="status_value"><h:outputText value="#{topView.cntWaitBoss}" /></p:column>
+                    <p:column styleClass="status_value"><h:outputText value="#{topView.cntWaitManager}" /></p:column>
+                    <p:column styleClass="status_value"><h:outputText value="#{topView.cntWaitPayment}" /></p:column>
                 </p:row>
             </p:panelGrid>
         </ui:define>

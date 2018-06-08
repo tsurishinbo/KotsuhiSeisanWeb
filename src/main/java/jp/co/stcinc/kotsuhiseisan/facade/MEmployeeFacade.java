@@ -24,7 +24,7 @@ public class MEmployeeFacade extends AbstractFacade<MEmployee> {
     }
     
     public MEmployee find(final Integer id, final String password) {
-        Query query = em.createNamedQuery("MEmployee.findById&Password");
+        Query query = em.createNamedQuery("MEmployee.findById&Password", MEmployee.class);
         query.setParameter("id", id);
         query.setParameter("password", password);
         MEmployee employee;
@@ -36,9 +36,49 @@ public class MEmployeeFacade extends AbstractFacade<MEmployee> {
         return employee;
     }
     
-    public List<MEmployee> findManager() {
-        Query query = em.createNamedQuery("MEmployee.findByManager");
-        query.setParameter("manager", 1);
+    public List<MEmployee> findBoss() {
+        Query query = em.createNamedQuery("MEmployee.findByIsManager", MEmployee.class);
+        query.setParameter("isManager", 1);
+        List<MEmployee> employeeList = query.getResultList();
+        return employeeList;
+    }
+    
+    public List<MEmployee> findBoss(final Integer id) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("WITH RECURSIVE temp(id, employee_name, boss_id) AS ( ");
+        sql.append("SELECT id, employee_name, boss_id ");
+        sql.append("FROM m_employee ");
+        sql.append("WHERE boss_id IS NULL ");
+        sql.append("UNION ");
+        sql.append("SELECT id, employee_name, boss_id ");
+        sql.append("FROM m_employee ");
+        sql.append("WHERE id = (SELECT boss_id FROM m_employee WHERE id = ?1) ");
+        sql.append("UNION ");
+        sql.append("SELECT m.id, m.employee_name, m.boss_id ");
+        sql.append("FROM m_employee m, temp t ");
+        sql.append("WHERE m.id = t.boss_id ");
+        sql.append(") ");
+        sql.append("SELECT id, employee_name FROM temp ORDER BY id ");
+        Query query = em.createNativeQuery(sql.toString(), MEmployee.class);
+        query.setParameter(1, id);
+        List<MEmployee> employeeList = query.getResultList();
+        return employeeList;
+    }
+
+    public List<MEmployee> findBuka(final Integer id) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("WITH RECURSIVE temp(id, employee_name, boss_id) AS ( ");
+        sql.append("SELECT id, employee_name, boss_id ");
+        sql.append("FROM m_employee ");
+        sql.append("WHERE id = ?1 ");
+        sql.append("UNION ");
+        sql.append("SELECT m.id, m.employee_name, m.boss_id ");
+        sql.append("FROM m_employee m, temp t ");
+        sql.append("WHERE m.boss_id = t.id ");
+        sql.append(") ");
+        sql.append("SELECT id, employee_name FROM temp ORDER BY id ");
+        Query query = em.createNativeQuery(sql.toString(), MEmployee.class);
+        query.setParameter(1, id);
         List<MEmployee> employeeList = query.getResultList();
         return employeeList;
     }

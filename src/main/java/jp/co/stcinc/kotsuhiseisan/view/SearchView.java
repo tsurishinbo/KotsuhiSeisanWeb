@@ -5,9 +5,12 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import jp.co.stcinc.kotsuhiseisan.common.Constant;
 import jp.co.stcinc.kotsuhiseisan.entity.MEmployee;
 import jp.co.stcinc.kotsuhiseisan.entity.TApplication;
 import jp.co.stcinc.kotsuhiseisan.facade.MEmployeeFacade;
@@ -26,37 +29,50 @@ public class SearchView extends AbstractView {
     @Getter @Setter    
     private Integer applyId;
     @Getter @Setter
-    private Integer approveId;
-    @Getter @Setter
     private Integer status;
     @Getter @Setter
     private List<SelectItem> applyList;
-    @Getter @Setter
-    private List<SelectItem> approveList;
     @Getter @Setter
     private List<TApplication> applicationList;
     @EJB
     private MEmployeeFacade mEmployeeFacade;
     @EJB
     private TApplicationFacade tApplicationFacade;
+
     @PostConstruct
+    @Override
     public void init() {
-        applyId = session.getEmpNo();
-        approveId = session.getBossId();
-        status = 0;
-        applicationList = null;
+        Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
+        if (flash.size() > 0) {
+            applyDateFrom = (Date)flash.get(Constant.SEARCHKEY_APPLYDATE_FROM);
+            applyDateTo = (Date)flash.get(Constant.SEARCHKEY_APPLYDATE_TO);
+            applyId = (Integer)flash.get(Constant.SEARCHKEY_APPLY_ID);
+            status = (Integer)flash.get(Constant.SEARCHKEY_STATUS);
+            setApplicationList();
+            flash.clear();
+        } else {
+            applyDateFrom = null;
+            applyDateTo = null;
+            applyId = session.getEmpNo();
+            status = -1;
+            applicationList = null;
+        }
         setApplyList();
-        setApproveList();
     }
     
     public String doSearch() {
-        applicationList = tApplicationFacade.findByForm(
-                applyDateFrom, 
-                applyDateTo, 
-                applyId, 
-                approveId, 
-                status);
+        setApplicationList();
         return null;
+    }
+    
+    public String doReference(Integer id) {
+        Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
+        flash.put(Constant.SEARCHKEY_ID, id);
+        flash.put(Constant.SEARCHKEY_APPLYDATE_FROM, applyDateFrom);
+        flash.put(Constant.SEARCHKEY_APPLYDATE_TO, applyDateTo);
+        flash.put(Constant.SEARCHKEY_APPLY_ID, applyId);
+        flash.put(Constant.SEARCHKEY_STATUS, status);        
+        return "reference.xhtml?faces-redirect=true";
     }
     
     private void setApplyList() {
@@ -70,20 +86,25 @@ public class SearchView extends AbstractView {
                 item.setLabel(employee.getEmployeeName());
                 applyList.add(item);
             }
+        } else if (session.isBoss()) {
+            applyList.add(new SelectItem(null, ""));
+            List<MEmployee> employeeList = mEmployeeFacade.findBuka(session.getEmpNo());
+            for (MEmployee employee : employeeList) {
+                SelectItem item = new SelectItem();
+                item.setValue(employee.getId());
+                item.setLabel(employee.getEmployeeName());
+                applyList.add(item);
+            }
         } else {
             applyList.add(new SelectItem(session.getEmpNo(), session.getEmpName()));
         }
     }
     
-    private void setApproveList() {
-        approveList = new ArrayList<>();
-        approveList.add(new SelectItem(null, ""));
-        List<MEmployee> employeeList = mEmployeeFacade.findManager();
-        for (MEmployee employee : employeeList) {
-            SelectItem item = new SelectItem();
-            item.setValue(employee.getId());
-            item.setLabel(employee.getEmployeeName());
-            approveList.add(item);
-        }
+    private void setApplicationList() {
+        applicationList = tApplicationFacade.findByForm(
+                applyDateFrom, 
+                applyDateTo, 
+                applyId, 
+                status);
     }
 }

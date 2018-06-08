@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package jp.co.stcinc.kotsuhiseisan.entity;
 
 import java.io.Serializable;
@@ -14,6 +19,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ *
+ * @author kageyamay
+ */
 @Entity
 @Table(name = "m_employee")
 @XmlRootElement
@@ -23,8 +32,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "MEmployee.findByPassword", query = "SELECT m FROM MEmployee m WHERE m.password = :password ORDER BY m.id")
     , @NamedQuery(name = "MEmployee.findByEmployeeName", query = "SELECT m FROM MEmployee m WHERE m.employeeName = :employeeName ORDER BY m.id")
     , @NamedQuery(name = "MEmployee.findByBossId", query = "SELECT m FROM MEmployee m WHERE m.bossId = :bossId ORDER BY m.id")
-    , @NamedQuery(name = "MEmployee.findByManager", query = "SELECT m FROM MEmployee m WHERE m.manager = :manager ORDER BY m.id")
-    , @NamedQuery(name = "MEmployee.findByEmail", query = "SELECT m FROM MEmployee m WHERE m.email = :email ORDER BY m.id")
+    , @NamedQuery(name = "MEmployee.findByIsBoss", query = "SELECT m FROM MEmployee m WHERE m.isBoss = :isBoss ORDER BY m.id")
+    , @NamedQuery(name = "MEmployee.findByIsManager", query = "SELECT m FROM MEmployee m WHERE m.isManager = :isManager ORDER BY m.id")
+    , @NamedQuery(name = "MEmployee.findByEmail", query = "SELECT m FROM MEmployee m WHERE m.email = :email")
     , @NamedQuery(name = "MEmployee.findById&Password", query = "SELECT m FROM MEmployee m WHERE m.id = :id AND m.password = :password ORDER BY m.id")})
 public class MEmployee implements Serializable {
 
@@ -48,15 +58,19 @@ public class MEmployee implements Serializable {
     private Integer bossId;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "manager")
-    private int manager;
+    @Column(name = "is_boss")
+    private int isBoss;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "is_manager")
+    private int isManager;
     @Size(max = 100)
     @Column(name = "email")
     private String email;
     @OneToOne
     @JoinColumn(name = "boss_id", referencedColumnName = "id", insertable = false, updatable = false)
     private MEmployee boss;
-
+    
     public MEmployee() {
     }
 
@@ -64,11 +78,12 @@ public class MEmployee implements Serializable {
         this.id = id;
     }
 
-    public MEmployee(Integer id, String password, String employeeName, int manager) {
+    public MEmployee(Integer id, String password, String employeeName, int isBoss, int isManager) {
         this.id = id;
         this.password = password;
         this.employeeName = employeeName;
-        this.manager = manager;
+        this.isBoss = isBoss;
+        this.isManager = isManager;
     }
 
     public Integer getId() {
@@ -103,12 +118,20 @@ public class MEmployee implements Serializable {
         this.bossId = bossId;
     }
 
-    public int getManager() {
-        return manager;
+    public int getIsBoss() {
+        return isBoss;
     }
 
-    public void setManager(int manager) {
-        this.manager = manager;
+    public void setIsBoss(int isBoss) {
+        this.isBoss = isBoss;
+    }
+
+    public int getIsManager() {
+        return isManager;
+    }
+
+    public void setIsManager(int isManager) {
+        this.isManager = isManager;
     }
 
     public String getEmail() {
@@ -118,7 +141,7 @@ public class MEmployee implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     public MEmployee getBoss() {
         return boss;
     }

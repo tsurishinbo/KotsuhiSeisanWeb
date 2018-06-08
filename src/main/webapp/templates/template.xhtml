@@ -19,16 +19,21 @@
                     <h:outputText id="emp_no" value="#{topView.session.empNo}" />
                     <h:outputLabel for="emp_name" value="／氏名:" />
                     <h:outputText id="emp_name" value="#{topView.session.empName}" />
-                    <h:outputText value="(管理職)" rendered="#{topView.session.manager}" style="color:#ff0000;" />
+                    <h:outputText value=" ★管理職 " rendered="#{topView.session.boss}" style="color:#ff0000;" />
+                    <h:outputText value=" ★管理部 " rendered="#{topView.session.manager}" style="color:#ff0000;" />
                     <h:outputLabel for="boss_name" value="／上司:" rendered="#{topView.session.bossId != null}" />
                     <h:outputText id="boss_name" value="#{topView.session.bossName}" rendered="#{topView.session.bossId != null}" />
                     <p:separator />
                 </div>
                 <div id="menu">
                     <p:commandButton styleClass="menubutton" value="トップ" ajax="false" action="#{topView.doTop()}"  />
-                    <p:commandButton styleClass="menubutton" value="申請検索" ajax="false" action="#{topView.doSearch()}" />
                     <p:commandButton styleClass="menubutton" value="申請作成" ajax="false" action="#{topView.doMake()}" />
-                    <p:commandButton styleClass="menubutton" value="申請承認" ajax="false" action="#{topView.doApprove()}" rendered="#{topView.session.manager}" />
+                    <p:commandButton styleClass="menubutton" value="申請検索" ajax="false" action="#{topView.doSearch()}" />
+                    <p:commandButton styleClass="menubutton" value="上司承認" ajax="false" action="#{topView.doBossApprove()}" rendered="#{topView.session.boss}" />
+                    <p:commandButton styleClass="menubutton" value="管理部承認" ajax="false" action="#{topView.doManagerApprove()}" rendered="#{topView.session.manager}" />
+                    <p:commandButton styleClass="menubutton" value="支払確定" ajax="false" action="#{topView.doPayment()}" rendered="#{topView.session.manager}" />
+                    <p:commandButton styleClass="menubutton" value="精算書" ajax="false" action="#{topView.doReport()}" rendered="#{topView.session.manager}" />
+                    <p:commandButton styleClass="menubutton" value="月次締め" ajax="false" action="#{topView.doMonthly()}" rendered="#{topView.session.manager}" />
                     <p:commandButton styleClass="menubutton" value="ログアウト" ajax="false" action="#{topView.doLogout()}" />
                 </div>
                 <div id="content">

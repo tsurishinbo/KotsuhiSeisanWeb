@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:composition template="./templates/template.xhtml">
+        <ui:define name="content">
+            <f:metadata>
+                <f:viewAction action="#{referenceView.doLoginCheck()}" />
+            </f:metadata>
+            <p:panelGrid>
+                <p:row>
+                    <p:column styleClass="reference_header">申請ID</p:column>
+                    <p:column styleClass="reference_value">
+                        <h:outputText value="#{referenceView.application.id}" />
+                    </p:column>
+                    <p:column styleClass="reference_header">ステータス</p:column>
+                    <p:column styleClass="reference_value">
+                        <h:outputText value="#{referenceView.getStatusName(referenceView.application.status)}" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="reference_header">申請者</p:column>
+                    <p:column styleClass="reference_value">
+                        <h:outputText value="#{referenceView.application.applicant.employeeName}" />
+                    </p:column>
+                    <p:column styleClass="reference_header">申請日</p:column>
+                    <p:column styleClass="reference_value">
+                        <h:outputText value="#{referenceView.application.applyDate}">
+                            <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
+                        </h:outputText>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="reference_header">承認者</p:column>
+                    <p:column styleClass="reference_value">
+                        <h:outputText value="#{referenceView.application.boss.employeeName}" />
+                    </p:column>
+                    <p:column styleClass="reference_header">承認日</p:column>
+                    <p:column styleClass="reference_value">
+                        <h:outputText value="#{referenceView.application.bossApproveDate}">
+                            <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
+                        </h:outputText>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="reference_header">管理部承認者</p:column>
+                    <p:column styleClass="reference_value">
+                        <h:outputText value="#{referenceView.application.manager.employeeName}" />
+                    </p:column>
+                    <p:column styleClass="reference_header">管理部承認日</p:column>
+                    <p:column styleClass="reference_value">
+                        <h:outputText value="#{referenceView.application.managerApproveDate}">
+                            <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
+                        </h:outputText>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="reference_header">支払者</p:column>
+                    <p:column styleClass="reference_value">
+                        <h:outputText value="#{referenceView.application.payer.employeeName}" />
+                    </p:column>
+                    <p:column styleClass="reference_header">支払日</p:column>
+                    <p:column styleClass="reference_value">
+                        <h:outputText value="#{referenceView.application.paymentDate}">
+                            <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
+                        </h:outputText>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="reference_header">合計料金</p:column>
+                    <p:column styleClass="reference_value">
+                        <h:outputText value="#{referenceView.application.totalFare}">
+                            <f:convertNumber pattern="#,##0" />
+                        </h:outputText>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            <ui:repeat var="line" value="#{referenceView.application.lines}">
+                <p:separator styleClass="dashed_line" />
+                <p:panelGrid>
+                    <p:row>
+                        <p:column styleClass="line_header">利用日</p:column>
+                        <p:column styleClass="line_value">
+                            <h:outputText value="#{line.usedDate}">
+                                <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
+                            </h:outputText>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="line_header">作業</p:column>
+                        <p:column styleClass="line_value">
+                            <h:outputText value="#{line.orderId}" />:<h:outputText value="#{line.order.orderName}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="line_header">出張内容</p:column>
+                        <p:column styleClass="line_value">
+                            <h:outputText value="#{line.purpose}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="line_header">出張場所</p:column>
+                        <p:column styleClass="line_value">
+                            <h:outputText value="#{line.place}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="line_header">交通手段</p:column>
+                        <p:column styleClass="line_value">
+                            <h:outputText value="#{line.means.means}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="line_header">区間</p:column>
+                        <p:column styleClass="line_value">
+                            <h:outputText value="#{line.sectionFrom}" />
+                            <h:outputText value="⇒" rendered="#{line.isRoundtrip == 0}" />
+                            <h:outputText value="⇔" rendered="#{line.isRoundtrip == 1}" />
+                            <h:outputText value="#{line.sectionTo}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="line_header">料金</p:column>
+                        <p:column styleClass="line_value">
+                            <h:outputText value="#{line.fare}">
+                                <f:convertNumber pattern="#,##0" />
+                            </h:outputText>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="line_header">備考</p:column>
+                        <p:column styleClass="line_value">
+                            <h:outputText value="#{line.memo}" />
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </ui:repeat>
+            <p />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="COPY" ajax="false" action="#{referenceView.doReturn()}" rendered="#{referenceView.enabledCopy}" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="編集" ajax="false" action="#{referenceView.doReturn()}" rendered="#{referenceView.enabledEdit}" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="削除" ajax="false" action="#{referenceView.doReturn()}" rendered="#{referenceView.enabledDelete}" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="申請取消" ajax="false" action="#{referenceView.doReturn()}" rendered="#{referenceView.enabledCancelApply}" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="承認取消" ajax="false" action="#{referenceView.doReturn()}" rendered="#{referenceView.enabledCancelApprove}" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="精算書出力" ajax="false" action="#{referenceView.doReturn()}" rendered="#{referenceView.enabledReport}" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="戻る" ajax="false" action="#{referenceView.doReturn()}" />
+        </ui:define>
+    </ui:composition>
+</html>

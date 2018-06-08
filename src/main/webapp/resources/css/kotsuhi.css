@@ -1,30 +1,46 @@
 #main {
-    width: 1000px;
+    width: 1200px;
     margin-left: auto;
     margin-right: auto;
 }
 
 #header {
-    width: 1000px;
+    width: 1200px;
     height: 80px;
 }
 
 #menu {
-    width: 120px;
+    width: 150px;
     margin-top: 10px;
     float: left;
 }
 
 #content {
-    width: 880px;
+    width: 1050px;
     margin-top: 10px;
     float: right;
 }
 
+.message {
+    color: #ff0000;
+}
+
 .menubutton {
-    width: 100px;
+    width: 120px;
     margin-bottom: 5px;
     text-align: center;
+}
+
+.cmdbutton {
+    width: 80px;
+    height: 25px;
+    margin-right: 5px;
+}
+
+.dashed_line {
+    border: none;
+    border-top: dashed 1px #c0c0c0;
+    height: 1px;
 }
 
 .status_header {
@@ -39,6 +55,23 @@
     text-align: center;
 }
 
-.message {
-    color: #ff0000;
+.reference_header {
+    width: 80px;
+    font-weight: bold;
+    background-color: #f0f8ff;
 }
+
+.reference_value {
+    width: 100px;
+}
+
+.line_header {
+    width: 80px;
+    font-weight: bold;
+    background-color: #f0f8ff;
+}
+
+.line_value {
+    width: 400px;
+}
+

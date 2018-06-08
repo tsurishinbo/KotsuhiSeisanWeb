@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import jp.co.stcinc.kotsuhiseisan.common.Constant;
 import jp.co.stcinc.kotsuhiseisan.entity.TApplication;
 
 @Stateless
@@ -26,7 +27,7 @@ public class TApplicationFacade extends AbstractFacade<TApplication> {
     }
     
     public Long getCountByStatus(final Integer applyId, final Integer status) {
-        Query query = em.createNamedQuery("TApplication.getCountByStatus");
+        Query query = em.createNamedQuery("TApplication.getCountByStatus", Long.class);
         query.setParameter("applyId", applyId);
         query.setParameter("status", status);
         Long count = (Long)query.getSingleResult();
@@ -37,7 +38,6 @@ public class TApplicationFacade extends AbstractFacade<TApplication> {
             final Date applyDateFrom,
             final Date applyDateTo,
             final Integer applyId,
-            final Integer approveId,
             final Integer status) {
         
         Map<String, Object> parameters = new HashMap<>();
@@ -57,11 +57,7 @@ public class TApplicationFacade extends AbstractFacade<TApplication> {
             jpql.append("AND t.applyId = :applyId ");
             parameters.put("applyId", applyId);
         }
-        if (approveId != null) {
-            jpql.append("AND t.approveId = :approveId ");
-            parameters.put("approveId", approveId);
-        }
-        if (status != 0) {
+        if (status != Constant.STATUS_ALL) {
             jpql.append("AND t.status = :status ");
             parameters.put("status", status);
         }

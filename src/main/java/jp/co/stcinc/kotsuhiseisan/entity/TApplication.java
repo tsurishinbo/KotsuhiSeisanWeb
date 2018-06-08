@@ -27,14 +27,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "t_application")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TApplication.findAll", query = "SELECT t FROM TApplication t ORDER BY t.id")
-    , @NamedQuery(name = "TApplication.findById", query = "SELECT t FROM TApplication t WHERE t.id = :id ORDER BY t.id")
-    , @NamedQuery(name = "TApplication.findByStatus", query = "SELECT t FROM TApplication t WHERE t.status = :status ORDER BY t.id")
-    , @NamedQuery(name = "TApplication.findByApplyId", query = "SELECT t FROM TApplication t WHERE t.applyId = :applyId ORDER BY t.id")
-    , @NamedQuery(name = "TApplication.findByApplyDate", query = "SELECT t FROM TApplication t WHERE t.applyDate = :applyDate ORDER BY t.id")
-    , @NamedQuery(name = "TApplication.findByApproveId", query = "SELECT t FROM TApplication t WHERE t.approveId = :approveId ORDER BY t.id")
-    , @NamedQuery(name = "TApplication.findByApproveDate", query = "SELECT t FROM TApplication t WHERE t.approveDate = :approveDate ORDER BY t.id")
-    , @NamedQuery(name = "TApplication.findByTotalFare", query = "SELECT t FROM TApplication t WHERE t.totalFare = :totalFare ORDER BY t.id")
+    @NamedQuery(name = "TApplication.findAll", query = "SELECT t FROM TApplication t")
+    , @NamedQuery(name = "TApplication.findById", query = "SELECT t FROM TApplication t WHERE t.id = :id")
+    , @NamedQuery(name = "TApplication.findByStatus", query = "SELECT t FROM TApplication t WHERE t.status = :status")
+    , @NamedQuery(name = "TApplication.findByApplyId", query = "SELECT t FROM TApplication t WHERE t.applyId = :applyId")
+    , @NamedQuery(name = "TApplication.findByApplyDate", query = "SELECT t FROM TApplication t WHERE t.applyDate = :applyDate")
+    , @NamedQuery(name = "TApplication.findByBossApproveId", query = "SELECT t FROM TApplication t WHERE t.bossApproveId = :bossApproveId")
+    , @NamedQuery(name = "TApplication.findByBossApproveDate", query = "SELECT t FROM TApplication t WHERE t.bossApproveDate = :bossApproveDate")
+    , @NamedQuery(name = "TApplication.findByManagerApproveId", query = "SELECT t FROM TApplication t WHERE t.managerApproveId = :managerApproveId")
+    , @NamedQuery(name = "TApplication.findByManagerApproveDate", query = "SELECT t FROM TApplication t WHERE t.managerApproveDate = :managerApproveDate")
+    , @NamedQuery(name = "TApplication.findByPaymentId", query = "SELECT t FROM TApplication t WHERE t.paymentId = :paymentId")
+    , @NamedQuery(name = "TApplication.findByPaymentDate", query = "SELECT t FROM TApplication t WHERE t.paymentDate = :paymentDate")
+    , @NamedQuery(name = "TApplication.findByTotalFare", query = "SELECT t FROM TApplication t WHERE t.totalFare = :totalFare")
+    , @NamedQuery(name = "TApplication.findByRejectCnt", query = "SELECT t FROM TApplication t WHERE t.rejectCnt = :rejectCnt")
     , @NamedQuery(name = "TApplication.getCountByStatus", query = "SELECT COUNT(t) FROM TApplication t WHERE t.applyId = :applyId AND t.status = :status")})
 public class TApplication implements Serializable {
 
@@ -55,26 +60,46 @@ public class TApplication implements Serializable {
     @Column(name = "apply_date")
     @Temporal(TemporalType.DATE)
     private Date applyDate;
-    @Column(name = "approve_id")
-    private Integer approveId;
-    @Column(name = "approve_date")
+    @Column(name = "boss_approve_id")
+    private Integer bossApproveId;
+    @Column(name = "boss_approve_date")
     @Temporal(TemporalType.DATE)
-    private Date approveDate;
+    private Date bossApproveDate;
+    @Column(name = "manager_approve_id")
+    private Integer managerApproveId;
+    @Column(name = "manager_approve_date")
+    @Temporal(TemporalType.DATE)
+    private Date managerApproveDate;
+    @Column(name = "payment_id")
+    private Integer paymentId;
+    @Column(name = "payment_date")
+    @Temporal(TemporalType.DATE)
+    private Date paymentDate;
     @Basic(optional = false)
     @NotNull
     @Column(name = "total_fare")
     private BigInteger totalFare;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "reject_cnt")
+    private int rejectCnt;
     @OneToOne
     @JoinColumn(name = "apply_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private MEmployee applyEmployee;
+    private MEmployee applicant;
     @OneToOne
-    @JoinColumn(name = "approve_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private MEmployee approveEmployee;
+    @JoinColumn(name = "boss_approve_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private MEmployee boss;
+    @OneToOne
+    @JoinColumn(name = "manager_approve_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private MEmployee manager;
+    @OneToOne
+    @JoinColumn(name = "payment_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private MEmployee payer;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "application_id", referencedColumnName = "id")
     @OrderBy("sortNo asc")
     private List<TLine> lines;
-    
+
     public TApplication() {
     }
 
@@ -82,11 +107,12 @@ public class TApplication implements Serializable {
         this.id = id;
     }
 
-    public TApplication(Integer id, int status, int applyId, BigInteger totalFare) {
+    public TApplication(Integer id, int status, int applyId, BigInteger totalFare, int rejectCnt) {
         this.id = id;
         this.status = status;
         this.applyId = applyId;
         this.totalFare = totalFare;
+        this.rejectCnt = rejectCnt;
     }
 
     public Integer getId() {
@@ -121,20 +147,52 @@ public class TApplication implements Serializable {
         this.applyDate = applyDate;
     }
 
-    public Integer getApproveId() {
-        return approveId;
+    public Integer getBossApproveId() {
+        return bossApproveId;
     }
 
-    public void setApproveId(Integer approveId) {
-        this.approveId = approveId;
+    public void setBossApproveId(Integer bossApproveId) {
+        this.bossApproveId = bossApproveId;
     }
 
-    public Date getApproveDate() {
-        return approveDate;
+    public Date getBossApproveDate() {
+        return bossApproveDate;
     }
 
-    public void setApproveDate(Date approveDate) {
-        this.approveDate = approveDate;
+    public void setBossApproveDate(Date bossApproveDate) {
+        this.bossApproveDate = bossApproveDate;
+    }
+
+    public Integer getManagerApproveId() {
+        return managerApproveId;
+    }
+
+    public void setManagerApproveId(Integer managerApproveId) {
+        this.managerApproveId = managerApproveId;
+    }
+
+    public Date getManagerApproveDate() {
+        return managerApproveDate;
+    }
+
+    public void setManagerApproveDate(Date managerApproveDate) {
+        this.managerApproveDate = managerApproveDate;
+    }
+
+    public Integer getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(Integer paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    public Date getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(Date paymentDate) {
+        this.paymentDate = paymentDate;
     }
 
     public BigInteger getTotalFare() {
@@ -145,20 +203,44 @@ public class TApplication implements Serializable {
         this.totalFare = totalFare;
     }
 
-    public MEmployee getApplyEmployee() {
-        return applyEmployee;
+    public int getRejectCnt() {
+        return rejectCnt;
     }
 
-    public void setApplyEmployee(MEmployee applyEmployee) {
-        this.applyEmployee = applyEmployee;
+    public void setRejectCnt(int rejectCnt) {
+        this.rejectCnt = rejectCnt;
     }
 
-    public MEmployee getApproveEmployee() {
-        return approveEmployee;
+    public MEmployee getApplicant() {
+        return applicant;
     }
 
-    public void setApproveEmployee(MEmployee approveEmployee) {
-        this.approveEmployee = approveEmployee;
+    public void setApplicant(MEmployee applicant) {
+        this.applicant = applicant;
+    }
+
+    public MEmployee getBoss() {
+        return boss;
+    }
+
+    public void setBoss(MEmployee boss) {
+        this.boss = boss;
+    }
+
+    public MEmployee getManager() {
+        return manager;
+    }
+
+    public void setManager(MEmployee manager) {
+        this.manager = manager;
+    }
+
+    public MEmployee getPayer() {
+        return payer;
+    }
+
+    public void setPayer(MEmployee payer) {
+        this.payer = payer;
     }
 
     public List<TLine> getLines() {

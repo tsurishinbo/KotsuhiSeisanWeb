@@ -24,35 +24,58 @@
                     <p:message for="apply_date_to" />
                 </h:panelGroup>
                 <p:outputLabel for="apply_id" value="申請者" />
-                <h:selectOneMenu id="apply_id" style="width:150px" value="#{searchView.applyId}">
+                <p:selectOneMenu id="apply_id" style="width:150px" value="#{searchView.applyId}">
                     <f:selectItems value="#{searchView.applyList}" />
-                </h:selectOneMenu>
-                <p:outputLabel for="approve_id" value="承認者" />
-                <h:selectOneMenu id="approve_id" style="width:150px" value="#{searchView.approveId}">
-                    <f:selectItems value="#{searchView.approveList}" />
-                </h:selectOneMenu>
+                </p:selectOneMenu>
                 <p:outputLabel for="status" value="ステータス" />
-                <h:selectOneRadio id="status" value="#{searchView.status}">
-                    <f:selectItem itemValue="0" itemLabel="すべて" />
-                    <f:selectItem itemValue="1" itemLabel="未申請" />
-                    <f:selectItem itemValue="2" itemLabel="承認待ち" />
-                    <f:selectItem itemValue="3" itemLabel="承認済" />
-                    <f:selectItem itemValue="4" itemLabel="差戻し" />
-                </h:selectOneRadio>
+                <p:selectOneRadio id="status" value="#{searchView.status}">
+                    <f:selectItem itemValue="-1" itemLabel="すべて" />
+                    <f:selectItem itemValue="0" itemLabel="未申請" />
+                    <f:selectItem itemValue="1" itemLabel="上司承認待ち" />
+                    <f:selectItem itemValue="2" itemLabel="管理部承認待ち" />
+                    <f:selectItem itemValue="3" itemLabel="支払待ち" />
+                    <f:selectItem itemValue="4" itemLabel="支払済" />
+                </p:selectOneRadio>
             </p:panelGrid>
             <p />
-            <p:commandButton value="検索" ajax="false" action="#{searchView.doSearch()}" />
-            <p:separator />
-            <ui:fragment rendered="#{searchView.applicationList.size() > 0}">
-                <p:dataTable id="applicationList" var="app" value="#{searchView.applicationList}">
-                    <p:column id="colId" headerText="申請ID">
+            <p:commandButton styleClass="cmdbutton" value="検索" ajax="false" action="#{searchView.doSearch()}" />
+            <ui:fragment rendered="#{searchView.applicationList != null}">
+                <p:separator />
+                <p:dataTable var="app" value="#{searchView.applicationList}">
+                    <p:column headerText="申請ID">
                         <h:outputText value="#{app.id}" />
                     </p:column>
-                    <p:column id="colStatus" headerText="ステータス">
-                        <h:outputText value="未申請" rendered="#{app.status == 1}" />
-                        <h:outputText value="承認待ち" rendered="#{app.status == 2}" />
-                        <h:outputText value="承認済" rendered="#{app.status == 3}" />
-                        <h:outputText value="差戻し" rendered="#{app.status == 4}" />
+                    <p:column headerText="ステータス">
+                        <h:outputText value="#{searchView.getStatusName(app.status)}" />
+                    </p:column>
+                    <p:column headerText="申請者">
+                        <h:outputText value="#{app.applicant.employeeName}" />
+                    </p:column>
+                    <p:column headerText="承認者">
+                        <h:outputText value="#{app.boss.employeeName}" />
+                    </p:column>
+                    <p:column headerText="申請日">
+                        <h:outputText value="#{app.applyDate}">
+                            <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="承認日">
+                        <h:outputText value="#{app.bossApproveDate}">
+                            <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="支払日">
+                        <h:outputText value="#{app.paymentDate}">
+                            <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="合計料金">
+                        <h:outputText value="#{app.totalFare}">
+                            <f:convertNumber pattern="#,##0" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <p:commandButton value="詳細" ajax="false" icon="ui-icon-search" action="#{searchView.doReference(app.id)}" />
                     </p:column>
                 </p:dataTable>
             </ui:fragment>
