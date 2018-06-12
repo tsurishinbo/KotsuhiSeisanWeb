@@ -93,7 +93,9 @@
                     <p:row>
                         <p:column styleClass="line_header">作業</p:column>
                         <p:column styleClass="line_value">
-                            <h:outputText value="#{line.orderId}" />:<h:outputText value="#{line.order.orderName}" />
+                            <h:outputText value="#{line.orderId}" />
+                            <h:outputText value=":" rendered="#{line.orderId != null}" />
+                            <h:outputText value="#{line.order.orderName}" />
                         </p:column>
                     </p:row>
                     <p:row>
@@ -140,13 +142,28 @@
                 </p:panelGrid>
             </ui:repeat>
             <p />
-            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="COPY" ajax="false" action="#{referenceView.doReturn()}" rendered="#{referenceView.enabledCopy}" />
-            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="編集" ajax="false" action="#{referenceView.doReturn()}" rendered="#{referenceView.enabledEdit}" />
-            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="削除" ajax="false" action="#{referenceView.doReturn()}" rendered="#{referenceView.enabledDelete}" />
-            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="申請取消" ajax="false" action="#{referenceView.doReturn()}" rendered="#{referenceView.enabledCancelApply}" />
-            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="承認取消" ajax="false" action="#{referenceView.doReturn()}" rendered="#{referenceView.enabledCancelApprove}" />
-            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="精算書出力" ajax="false" action="#{referenceView.doReturn()}" rendered="#{referenceView.enabledReport}" />
-            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="戻る" ajax="false" action="#{referenceView.doReturn()}" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="編集" ajax="false" 
+                             action="#{referenceView.doEdit()}" rendered="#{referenceView.enabledEdit}" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="削除" ajax="false" 
+                             action="#{referenceView.doDelete()}" rendered="#{referenceView.enabledDelete}"
+                             onclick="return confirm('申請を削除します。')" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="コピー" ajax="false" 
+                             action="#{referenceView.doCopy()}" rendered="#{referenceView.enabledCopy}"
+                             onclick="return confirm('申請をコピーします。')" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="申請取消" ajax="false" 
+                             action="#{referenceView.doCancelApply()}" rendered="#{referenceView.enabledCancelApply}"
+                             onclick="return confirm('申請を取消します。')" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="上司承認取消" ajax="false" 
+                             action="#{referenceView.doCancelBossApprove()}" rendered="#{referenceView.enabledCancelBossApprove}"
+                             onclick="return confirm('上申承認を取消します。')" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="管理部承認取消" ajax="false" 
+                             action="#{referenceView.doCancelManagerApprove()}" rendered="#{referenceView.enabledCancelManagerApprove}"
+                             onclick="return confirm('管理部承認を取消します。')" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="精算書出力" ajax="false" 
+                             action="#{referenceView.doReport()}" rendered="#{referenceView.enabledReport}" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="戻る" ajax="false" 
+                             action="#{referenceView.doReturn()}" />
+            <p />
         </ui:define>
     </ui:composition>
 </html>

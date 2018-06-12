@@ -51,7 +51,7 @@ public class TopView extends AbstractView {
     }
     
     public String doMake() {
-        return null;
+        return "make.xhtml?faces-redirect=true";
     }
     
     public String doBossApprove() {

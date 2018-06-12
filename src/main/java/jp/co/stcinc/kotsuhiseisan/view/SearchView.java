@@ -44,10 +44,10 @@ public class SearchView extends AbstractView {
     public void init() {
         Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
         if (flash.size() > 0) {
-            applyDateFrom = (Date)flash.get(Constant.SEARCHKEY_APPLYDATE_FROM);
-            applyDateTo = (Date)flash.get(Constant.SEARCHKEY_APPLYDATE_TO);
-            applyId = (Integer)flash.get(Constant.SEARCHKEY_APPLY_ID);
-            status = (Integer)flash.get(Constant.SEARCHKEY_STATUS);
+            applyDateFrom = (Date)flash.get(Constant.PARAM_SEARCH_APPLYDATEFROM);
+            applyDateTo = (Date)flash.get(Constant.PARAM_SEARCH_APPLYDATETO);
+            applyId = (Integer)flash.get(Constant.PARAM_SEARCH_APPLYID);
+            status = (Integer)flash.get(Constant.PARAM_SEARCH_STATUS);
             setApplicationList();
             flash.clear();
         } else {
@@ -67,11 +67,11 @@ public class SearchView extends AbstractView {
     
     public String doReference(Integer id) {
         Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
-        flash.put(Constant.SEARCHKEY_ID, id);
-        flash.put(Constant.SEARCHKEY_APPLYDATE_FROM, applyDateFrom);
-        flash.put(Constant.SEARCHKEY_APPLYDATE_TO, applyDateTo);
-        flash.put(Constant.SEARCHKEY_APPLY_ID, applyId);
-        flash.put(Constant.SEARCHKEY_STATUS, status);        
+        flash.put(Constant.PARAM_SEARCH_ID, id);
+        flash.put(Constant.PARAM_SEARCH_APPLYDATEFROM, applyDateFrom);
+        flash.put(Constant.PARAM_SEARCH_APPLYDATETO, applyDateTo);
+        flash.put(Constant.PARAM_SEARCH_APPLYID, applyId);
+        flash.put(Constant.PARAM_SEARCH_STATUS, status);        
         return "reference.xhtml?faces-redirect=true";
     }
     

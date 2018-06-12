@@ -9,11 +9,15 @@ public class Constant {
     public static final int STATUS_WAIT_PAYMENT = 3;
     public static final int STATUS_WAIT_PAID = 4;
 
-    public static final String SEARCHKEY_ID = "searchkey_id";
-    public static final String SEARCHKEY_APPLYDATE_FROM = "searchkey_applydate_from";
-    public static final String SEARCHKEY_APPLYDATE_TO = "searchkey_applydate_to";
-    public static final String SEARCHKEY_APPLY_ID = "searchkey_apply_id";
-    public static final String SEARCHKEY_APPROVE_ID = "searchkey_approve_id";
-    public static final String SEARCHKEY_STATUS = "searchkey_status";
+    public static final int MAKE_MODE_NEW = 1;
+    public static final int MAKE_MODE_EDIT = 2;
+
+    public static final String PARAM_MAKE_ID = "param_make_id";
     
+    public static final String PARAM_SEARCH_ID = "param_search_id";
+    public static final String PARAM_SEARCH_APPLYDATEFROM = "param_search_applydatefrom";
+    public static final String PARAM_SEARCH_APPLYDATETO = "param_search_applydateto";
+    public static final String PARAM_SEARCH_APPLYID = "param_search_applyid";
+    public static final String PARAM_SEARCH_APPROVEID = "param_search_approveid";
+    public static final String PARAM_SEARCH_STATUS = "param_search_status";
 }

@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:composition template="./templates/template.xhtml">
+        <ui:define name="content">
+            <f:metadata>
+                <f:viewAction action="#{makeView.doLoginCheck()}" />
+            </f:metadata>
+            <p:outputPanel styleClass="message">
+                <h:outputText value="#{makeView.message}" />
+            </p:outputPanel>
+            <p:commandButton styleClass="cmdbutton" value="新規追加" ajax="false" action="#{makeView.doAdd()}" />
+            <ui:repeat var="line" value="#{makeView.application.lines}">
+                <p:separator styleClass="dashed_line" />
+                <p:panelGrid>
+                    <p:row>
+                        <p:column styleClass="line_header">利用日</p:column>
+                        <p:column styleClass="line_value">
+                            <h:outputText value="#{line.usedDate}">
+                                <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
+                            </h:outputText>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="line_header">作業</p:column>
+                        <p:column styleClass="line_value">
+                            <h:outputText value="#{line.orderId}" />
+                            <h:outputText value=":" rendered="#{line.orderId != null}" />
+                            <h:outputText value="#{line.order.orderName}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="line_header">出張内容</p:column>
+                        <p:column styleClass="line_value">
+                            <h:outputText value="#{line.purpose}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="line_header">出張場所</p:column>
+                        <p:column styleClass="line_value">
+                            <h:outputText value="#{line.place}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="line_header">交通手段</p:column>
+                        <p:column styleClass="line_value">
+                            <h:outputText value="#{line.means.means}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="line_header">区間</p:column>
+                        <p:column styleClass="line_value">
+                            <h:outputText value="#{line.sectionFrom}" />
+                            <h:outputText value="⇒" rendered="#{line.isRoundtrip == 0}" />
+                            <h:outputText value="⇔" rendered="#{line.isRoundtrip == 1}" />
+                            <h:outputText value="#{line.sectionTo}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="line_header">料金</p:column>
+                        <p:column styleClass="line_value">
+                            <h:outputText value="#{line.fare}">
+                                <f:convertNumber pattern="#,##0" />
+                            </h:outputText>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="line_header">備考</p:column>
+                        <p:column styleClass="line_value">
+                            <h:outputText value="#{line.memo}" />
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <p />
+                <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="編集" ajax="false" 
+                                 action="#{makeView.doEdit()}" />
+                <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="削除" ajax="false"
+                                 action="#{makeView.doDelete(line)}" onclick="return confirm('申請を削除します。')" />
+                <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="コピー" ajax="false"
+                                 action="#{makeView.doCopy(line.id)}" onclick="return confirm('申請をコピーします。')" />
+            </ui:repeat>
+            <p />
+        </ui:define>
+    </ui:composition>
+</html>

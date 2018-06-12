@@ -36,8 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "TLine.findBySectionTo", query = "SELECT t FROM TLine t WHERE t.sectionTo = :sectionTo ORDER BY t.id")
     , @NamedQuery(name = "TLine.findByIsRoundtrip", query = "SELECT t FROM TLine t WHERE t.isRoundtrip = :isRoundtrip ORDER BY t.id")
     , @NamedQuery(name = "TLine.findByFare", query = "SELECT t FROM TLine t WHERE t.fare = :fare ORDER BY t.id")
-    , @NamedQuery(name = "TLine.findByMemo", query = "SELECT t FROM TLine t WHERE t.memo = :memo ORDER BY t.id")
-    , @NamedQuery(name = "TLine.findBySortNo", query = "SELECT t FROM TLine t WHERE t.sortNo = :sortNo ORDER BY t.id")})
+    , @NamedQuery(name = "TLine.findByMemo", query = "SELECT t FROM TLine t WHERE t.memo = :memo ORDER BY t.id")})
 public class TLine implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -93,10 +92,6 @@ public class TLine implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "memo")
     private String memo;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "sort_no")
-    private int sortNo;
     @OneToOne
     @JoinColumn(name = "means_id", referencedColumnName = "id", insertable = false, updatable = false)
     private MMeans means;
@@ -111,7 +106,7 @@ public class TLine implements Serializable {
         this.id = id;
     }
 
-    public TLine(Integer id, int applicationId, Date usedDate, String place, String purpose, int meansId, String sectionFrom, String sectionTo, int isRoundtrip, BigInteger fare, int sortNo) {
+    public TLine(Integer id, int applicationId, Date usedDate, String place, String purpose, int meansId, String sectionFrom, String sectionTo, int isRoundtrip, BigInteger fare) {
         this.id = id;
         this.applicationId = applicationId;
         this.usedDate = usedDate;
@@ -122,7 +117,6 @@ public class TLine implements Serializable {
         this.sectionTo = sectionTo;
         this.isRoundtrip = isRoundtrip;
         this.fare = fare;
-        this.sortNo = sortNo;
     }
 
     public Integer getId() {
@@ -219,14 +213,6 @@ public class TLine implements Serializable {
 
     public void setMemo(String memo) {
         this.memo = memo;
-    }
-
-    public int getSortNo() {
-        return sortNo;
-    }
-
-    public void setSortNo(int sortNo) {
-        this.sortNo = sortNo;
     }
 
     public MMeans getMeans() {

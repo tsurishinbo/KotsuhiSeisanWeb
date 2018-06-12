@@ -97,7 +97,7 @@ public class TApplication implements Serializable {
     private MEmployee payer;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "application_id", referencedColumnName = "id")
-    @OrderBy("sortNo asc")
+    @OrderBy("id")
     private List<TLine> lines;
 
     public TApplication() {

@@ -25,7 +25,7 @@ public class TApplicationFacade extends AbstractFacade<TApplication> {
     public TApplicationFacade() {
         super(TApplication.class);
     }
-    
+
     public Long getCountByStatus(final Integer applyId, final Integer status) {
         Query query = em.createNamedQuery("TApplication.getCountByStatus", Long.class);
         query.setParameter("applyId", applyId);

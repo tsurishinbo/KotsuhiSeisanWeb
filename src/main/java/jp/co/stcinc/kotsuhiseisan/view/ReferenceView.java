@@ -1,6 +1,7 @@
 package jp.co.stcinc.kotsuhiseisan.view;
 
 import java.util.Date;
+import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
@@ -9,6 +10,10 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import jp.co.stcinc.kotsuhiseisan.common.Constant;
 import jp.co.stcinc.kotsuhiseisan.entity.TApplication;
+import jp.co.stcinc.kotsuhiseisan.entity.TLine;
+import jp.co.stcinc.kotsuhiseisan.facade.MEmployeeFacade;
+import jp.co.stcinc.kotsuhiseisan.facade.MMeansFacade;
+import jp.co.stcinc.kotsuhiseisan.facade.MOrderFacade;
 import jp.co.stcinc.kotsuhiseisan.facade.TApplicationFacade;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,29 +31,28 @@ public class ReferenceView extends AbstractView {
     private TApplication application;
     @EJB
     private TApplicationFacade tApplicationFacade;
+    @EJB
+    private MEmployeeFacade mEmployeeFacade;
     
     @PostConstruct
     @Override
     public void init() {
         Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
         if (flash.size() > 0) {
-            applyDateFrom = (Date)flash.get(Constant.SEARCHKEY_APPLYDATE_FROM);
-            applyDateTo = (Date)flash.get(Constant.SEARCHKEY_APPLYDATE_TO);
-            applyId = (Integer)flash.get(Constant.SEARCHKEY_APPLY_ID);
-            status = (Integer)flash.get(Constant.SEARCHKEY_STATUS);
-            Integer id = (Integer)flash.get(Constant.SEARCHKEY_ID);
+            applyDateFrom = (Date)flash.get(Constant.PARAM_SEARCH_APPLYDATEFROM);
+            applyDateTo = (Date)flash.get(Constant.PARAM_SEARCH_APPLYDATETO);
+            applyId = (Integer)flash.get(Constant.PARAM_SEARCH_APPLYID);
+            status = (Integer)flash.get(Constant.PARAM_SEARCH_STATUS);
+            Integer id = (Integer)flash.get(Constant.PARAM_SEARCH_ID);
             application = tApplicationFacade.find(id);
             flash.clear();
         }
     }
     
-    public String doCopy() {
-        
-        return null;
-    }
-    
     public String doEdit() {
-        return null;
+        Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
+        flash.put(Constant.PARAM_MAKE_ID, application.getId());
+        return "make.xhtml?faces-redirect=true";
     }
     
     public String doDelete() {
@@ -57,7 +61,28 @@ public class ReferenceView extends AbstractView {
         return "search.xhtml?faces-redirect=true";
     }
     
-    public String doApplyCancel() {
+    public String doCopy() {
+        application.setStatus(Constant.STATUS_SAVE);
+        application.setApplyDate(null);
+        application.setBossApproveId(session.getBossId());
+        application.setBossApproveDate(null);
+        application.setManagerApproveId(null);
+        application.setManagerApproveDate(null);
+        application.setPaymentId(null);
+        application.setPaymentDate(null);
+        application.setRejectCnt(0);
+        application.setBoss(mEmployeeFacade.find(session.getBossId()));
+        application.setManager(null);
+        application.setPayer(null);
+        for (TLine line : application.getLines()) {
+            line.setUsedDate(new Date());
+        }
+        tApplicationFacade.create(application);
+        setFlash();
+        return "search.xhtml?faces-redirect=true";
+    }
+    
+    public String doCancelApply() {
         application.setStatus(Constant.STATUS_SAVE);
         application.setApplyDate(null);
         tApplicationFacade.edit(application);
@@ -65,16 +90,18 @@ public class ReferenceView extends AbstractView {
         return "search.xhtml?faces-redirect=true";
     }
     
-    public String doApproveCancel() {
-        if (application.getStatus() == Constant.STATUS_WAIT_MANAGER) {
-            application.setStatus(Constant.STATUS_WAIT_BOSS);
-            application.setBossApproveDate(null);
-        }    
-        if (application.getStatus() == Constant.STATUS_WAIT_PAYMENT) {
-            application.setStatus(Constant.STATUS_WAIT_MANAGER);
-            application.setManagerApproveId(null);
-            application.setManagerApproveDate(null);
-        }
+    public String doCancelBossApprove() {
+        application.setStatus(Constant.STATUS_WAIT_BOSS);
+        application.setBossApproveDate(null);
+        tApplicationFacade.edit(application);
+        setFlash();
+        return "search.xhtml?faces-redirect=true";
+    }
+    
+    public String doCancelManagerApprove() {
+        application.setStatus(Constant.STATUS_WAIT_MANAGER);
+        application.setManagerApproveId(null);
+        application.setManagerApproveDate(null);
         tApplicationFacade.edit(application);
         setFlash();
         return "search.xhtml?faces-redirect=true";
@@ -87,13 +114,6 @@ public class ReferenceView extends AbstractView {
     public String doReturn() {
         setFlash();
         return "search.xhtml?faces-redirect=true";
-    }
-    
-    public boolean isEnabledCopy() {
-        if (application.getApplyId() == session.getEmpNo()) {
-            return true;
-        }
-        return false;
     }
     
     public boolean isEnabledEdit() {
@@ -112,6 +132,13 @@ public class ReferenceView extends AbstractView {
         return false;
     }
     
+    public boolean isEnabledCopy() {
+        if (application.getApplyId() == session.getEmpNo()) {
+            return true;
+        }
+        return false;
+    }
+    
     public boolean isEnabledCancelApply() {
         if (application.getApplyId() == session.getEmpNo()
                 && application.getStatus() == Constant.STATUS_WAIT_BOSS) {
@@ -120,12 +147,16 @@ public class ReferenceView extends AbstractView {
         return false;
     }
 
-    public boolean isEnabledCancelApprove() {
-        if (application.getBossApproveId().equals(session.getEmpNo())
+    public boolean isEnabledCancelBossApprove() {
+        if (Objects.equals(application.getBossApproveId(), session.getEmpNo())
                 && application.getStatus() == Constant.STATUS_WAIT_MANAGER) {
             return true;
         }
-        if (application.getManagerApproveId().equals(session.getEmpNo())
+        return false;
+    }
+
+    public boolean isEnabledCancelManagerApprove() {
+        if (Objects.equals(application.getManagerApproveId(), session.getEmpNo())
                 && application.getStatus() == Constant.STATUS_WAIT_PAYMENT) {
             return true;
         }
@@ -143,9 +174,9 @@ public class ReferenceView extends AbstractView {
     
     private void setFlash() {
         Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
-        flash.put(Constant.SEARCHKEY_APPLYDATE_FROM, applyDateFrom);
-        flash.put(Constant.SEARCHKEY_APPLYDATE_TO, applyDateTo);
-        flash.put(Constant.SEARCHKEY_APPLY_ID, applyId);
-        flash.put(Constant.SEARCHKEY_STATUS, status);
+        flash.put(Constant.PARAM_SEARCH_APPLYDATEFROM, applyDateFrom);
+        flash.put(Constant.PARAM_SEARCH_APPLYDATETO, applyDateTo);
+        flash.put(Constant.PARAM_SEARCH_APPLYID, applyId);
+        flash.put(Constant.PARAM_SEARCH_STATUS, status);
     }
 }
