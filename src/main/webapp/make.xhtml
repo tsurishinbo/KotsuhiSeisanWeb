@@ -13,75 +13,96 @@
             <p:outputPanel styleClass="message">
                 <h:outputText value="#{makeView.message}" />
             </p:outputPanel>
-            <p:commandButton styleClass="cmdbutton" value="新規追加" ajax="false" action="#{makeView.doAdd()}" />
-            <ui:repeat var="line" value="#{makeView.application.lines}">
-                <p:separator styleClass="dashed_line" />
-                <p:panelGrid>
-                    <p:row>
-                        <p:column styleClass="line_header">利用日</p:column>
-                        <p:column styleClass="line_value">
-                            <h:outputText value="#{line.usedDate}">
-                                <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
-                            </h:outputText>
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column styleClass="line_header">作業</p:column>
-                        <p:column styleClass="line_value">
-                            <h:outputText value="#{line.orderId}" />
-                            <h:outputText value=":" rendered="#{line.orderId != null}" />
-                            <h:outputText value="#{line.order.orderName}" />
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column styleClass="line_header">出張内容</p:column>
-                        <p:column styleClass="line_value">
-                            <h:outputText value="#{line.purpose}" />
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column styleClass="line_header">出張場所</p:column>
-                        <p:column styleClass="line_value">
-                            <h:outputText value="#{line.place}" />
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column styleClass="line_header">交通手段</p:column>
-                        <p:column styleClass="line_value">
-                            <h:outputText value="#{line.means.means}" />
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column styleClass="line_header">区間</p:column>
-                        <p:column styleClass="line_value">
-                            <h:outputText value="#{line.sectionFrom}" />
-                            <h:outputText value="⇒" rendered="#{line.isRoundtrip == 0}" />
-                            <h:outputText value="⇔" rendered="#{line.isRoundtrip == 1}" />
-                            <h:outputText value="#{line.sectionTo}" />
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column styleClass="line_header">料金</p:column>
-                        <p:column styleClass="line_value">
-                            <h:outputText value="#{line.fare}">
-                                <f:convertNumber pattern="#,##0" />
-                            </h:outputText>
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column styleClass="line_header">備考</p:column>
-                        <p:column styleClass="line_value">
-                            <h:outputText value="#{line.memo}" />
-                        </p:column>
-                    </p:row>
-                </p:panelGrid>
-                <p />
-                <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="編集" ajax="false" 
-                                 action="#{makeView.doEdit()}" />
-                <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="削除" ajax="false"
-                                 action="#{makeView.doDelete(line)}" onclick="return confirm('申請を削除します。')" />
-                <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="コピー" ajax="false"
-                                 action="#{makeView.doCopy(line.id)}" onclick="return confirm('申請をコピーします。')" />
+            
+            <p />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="新規追加" ajax="false" 
+                             action="#{makeView.doAdd()}" immediate="true" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="保存" ajax="false"
+                             action="#{makeView.doSave()}" onclick="return confirm('この内容を保存します。')" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="申請" ajax="false"
+                             action="#{makeView.doApply()}" onclick="return confirm('この内容を申請します。')" />
+            <ui:repeat var="lineDto" value="#{makeView.lineDtoList}">
+                <ui:fragment rendered="#{makeView.isEnabled(lineDto)}">
+                    <p:separator styleClass="dashed_line" />
+                    <p:panelGrid>
+                        <p:row>
+                            <p:column styleClass="line_header">利用日</p:column>
+                            <p:column styleClass="line_value">
+                                <p:calendar value="#{lineDto.usedDate}" locale="ja" pattern="yyyy/MM/dd" size="10">
+                                    <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
+                                </p:calendar>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column styleClass="line_header">作業</p:column>
+                            <p:column styleClass="line_value">
+                                <p:selectOneMenu value="#{lineDto.orderId}">
+                                    <f:selectItems value="#{makeView.orderList}" />
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column styleClass="line_header">出張内容</p:column>
+                            <p:column styleClass="line_value">
+                                <p:inputText style="width:300px;" value="#{lineDto.purpose}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column styleClass="line_header">出張場所</p:column>
+                            <p:column styleClass="line_value">
+                                <p:inputText style="width:300px;" value="#{lineDto.place}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column styleClass="line_header">交通手段</p:column>
+                            <p:column styleClass="line_value">
+                                <p:selectOneRadio value="#{lineDto.meansId}">
+                                    <f:selectItems value="#{makeView.meansList}" />
+                                </p:selectOneRadio>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column styleClass="line_header">出発地</p:column>
+                            <p:column styleClass="line_value">
+                                <p:inputText style="width:200px;" value="#{lineDto.sectionFrom}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column styleClass="line_header">到着地</p:column>
+                            <p:column styleClass="line_value">
+                                <p:inputText style="width:200px;" value="#{lineDto.sectionTo}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column styleClass="line_header">片道料金</p:column>
+                            <p:column styleClass="line_value">
+                                <p:inputNumber style="width:100px;" value="#{lineDto.oneWayFee}" minValue="0" maxValue="999999" decimalPlaces="0" thousandSeparator="">
+                                    <p:ajax update="fare" />
+                                </p:inputNumber>
+                                <p:selectBooleanCheckbox value="#{lineDto.roundtrip}" itemLabel="往復" style="margin-left:10px;">
+                                    <p:ajax update="fare" />
+                                </p:selectBooleanCheckbox>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column styleClass="line_header">申請料金</p:column>
+                            <p:column styleClass="line_value">
+                                <h:outputText id="fare" value="#{makeView.getFare(lineDto.oneWayFee, lineDto.roundtrip)}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column styleClass="line_header">備考</p:column>
+                            <p:column styleClass="line_value">
+                                <p:inputTextarea value="#{lineDto.memo}" cols="50" rows="2" />
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <p />
+                    <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="削除" ajax="false" immediate="true"
+                                     action="#{makeView.doDelete(lineDto)}" onclick="return confirm('申請を削除します。')" />
+                    <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="コピー" ajax="false" immediate="true"
+                                     action="#{makeView.doCopy(lineDto)}" onclick="return confirm('申請をコピーします。')" />
+                </ui:fragment>
             </ui:repeat>
             <p />
         </ui:define>

@@ -136,7 +136,7 @@
                     <p:row>
                         <p:column styleClass="line_header">備考</p:column>
                         <p:column styleClass="line_value">
-                            <h:outputText value="#{line.memo}" />
+                            <h:outputText value="#{referenceView.br(line.memo)}" escape="false" />
                         </p:column>
                     </p:row>
                 </p:panelGrid>

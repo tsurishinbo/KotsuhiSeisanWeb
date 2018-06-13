@@ -25,6 +25,13 @@ public class TApplicationFacade extends AbstractFacade<TApplication> {
     public TApplicationFacade() {
         super(TApplication.class);
     }
+    
+    @Override
+    public List<TApplication> findAll() {
+        Query query = em.createNamedQuery("TApplication.findAll", TApplication.class);
+        List<TApplication> applicationList = query.getResultList();
+        return applicationList;
+    }
 
     public Long getCountByStatus(final Integer applyId, final Integer status) {
         Query query = em.createNamedQuery("TApplication.getCountByStatus", Long.class);

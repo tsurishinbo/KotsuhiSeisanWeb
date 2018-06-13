@@ -88,7 +88,7 @@ public class TLine implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "fare")
-    private BigInteger fare;
+    private int fare;
     @Size(max = 2147483647)
     @Column(name = "memo")
     private String memo;
@@ -106,7 +106,7 @@ public class TLine implements Serializable {
         this.id = id;
     }
 
-    public TLine(Integer id, int applicationId, Date usedDate, String place, String purpose, int meansId, String sectionFrom, String sectionTo, int isRoundtrip, BigInteger fare) {
+    public TLine(Integer id, int applicationId, Date usedDate, String place, String purpose, int meansId, String sectionFrom, String sectionTo, int isRoundtrip, int fare) {
         this.id = id;
         this.applicationId = applicationId;
         this.usedDate = usedDate;
@@ -199,11 +199,11 @@ public class TLine implements Serializable {
         this.isRoundtrip = isRoundtrip;
     }
 
-    public BigInteger getFare() {
+    public int getFare() {
         return fare;
     }
 
-    public void setFare(BigInteger fare) {
+    public void setFare(int fare) {
         this.fare = fare;
     }
 

@@ -1,8 +1,10 @@
 package jp.co.stcinc.kotsuhiseisan.facade;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import jp.co.stcinc.kotsuhiseisan.entity.MMeans;
 
 @Stateless
@@ -20,4 +22,10 @@ public class MMeansFacade extends AbstractFacade<MMeans> {
         super(MMeans.class);
     }
     
+    @Override
+    public List<MMeans> findAll() {
+        Query query = em.createNamedQuery("MMeans.findAll", MMeans.class);
+        List<MMeans> meansList = query.getResultList();
+        return meansList;
+    }
 }

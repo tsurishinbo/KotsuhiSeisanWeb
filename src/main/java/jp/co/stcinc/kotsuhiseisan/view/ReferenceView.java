@@ -12,8 +12,6 @@ import jp.co.stcinc.kotsuhiseisan.common.Constant;
 import jp.co.stcinc.kotsuhiseisan.entity.TApplication;
 import jp.co.stcinc.kotsuhiseisan.entity.TLine;
 import jp.co.stcinc.kotsuhiseisan.facade.MEmployeeFacade;
-import jp.co.stcinc.kotsuhiseisan.facade.MMeansFacade;
-import jp.co.stcinc.kotsuhiseisan.facade.MOrderFacade;
 import jp.co.stcinc.kotsuhiseisan.facade.TApplicationFacade;
 import lombok.Getter;
 import lombok.Setter;
@@ -62,22 +60,26 @@ public class ReferenceView extends AbstractView {
     }
     
     public String doCopy() {
-        application.setStatus(Constant.STATUS_SAVE);
-        application.setApplyDate(null);
-        application.setBossApproveId(session.getBossId());
-        application.setBossApproveDate(null);
-        application.setManagerApproveId(null);
-        application.setManagerApproveDate(null);
-        application.setPaymentId(null);
-        application.setPaymentDate(null);
-        application.setRejectCnt(0);
-        application.setBoss(mEmployeeFacade.find(session.getBossId()));
-        application.setManager(null);
-        application.setPayer(null);
-        for (TLine line : application.getLines()) {
-            line.setUsedDate(new Date());
+        TApplication newApplication = tApplicationFacade.find(application.getId());
+        newApplication.setId(null);
+        newApplication.setStatus(Constant.STATUS_SAVE);
+        newApplication.setApplyDate(null);
+        newApplication.setBossApproveId(session.getBossId());
+        newApplication.setBossApproveDate(null);
+        newApplication.setManagerApproveId(null);
+        newApplication.setManagerApproveDate(null);
+        newApplication.setPaymentId(null);
+        newApplication.setPaymentDate(null);
+        newApplication.setRejectCnt(0);
+        newApplication.setBoss(mEmployeeFacade.find(session.getBossId()));
+        newApplication.setManager(null);
+        newApplication.setPayer(null);
+        for (TLine newLine : newApplication.getLines()) {
+            newLine.setId(null);
+            newLine.setApplicationId(0);
+            newLine.setUsedDate(new Date());
         }
-        tApplicationFacade.create(application);
+        tApplicationFacade.create(newApplication);
         setFlash();
         return "search.xhtml?faces-redirect=true";
     }

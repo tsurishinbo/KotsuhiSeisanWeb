@@ -23,6 +23,13 @@ public class MEmployeeFacade extends AbstractFacade<MEmployee> {
         super(MEmployee.class);
     }
     
+    @Override
+    public List<MEmployee> findAll() {
+        Query query = em.createNamedQuery("MEmployee.findAll", MEmployee.class);
+        List<MEmployee> employeeList = query.getResultList();
+        return employeeList;
+    }
+    
     public MEmployee find(final Integer id, final String password) {
         Query query = em.createNamedQuery("MEmployee.findById&Password", MEmployee.class);
         query.setParameter("id", id);

@@ -14,7 +14,7 @@
                 <h:outputText value="#{topView.message}" />
             </p:outputPanel>
             <p:outputLabel for="email" value="メールアドレス:" />
-            <h:outputText id="email" value="#{topView.session.email}" />
+            <p:inputText id="email" value="#{topView.session.email}" readonly="true" style="width:200px;" />
             <p:commandButton value="変更" ajax="false" action="#{topView.doChangeEmail()}" style="margin-left:10px;" />
             <p />
             <p:panelGrid>

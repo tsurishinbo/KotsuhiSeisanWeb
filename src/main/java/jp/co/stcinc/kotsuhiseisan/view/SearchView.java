@@ -77,8 +77,8 @@ public class SearchView extends AbstractView {
     
     private void setApplyList() {
         applyList = new ArrayList<>();
+        applyList.add(new SelectItem(null, ""));
         if (session.isManager()) {
-            applyList.add(new SelectItem(null, ""));
             List<MEmployee> employeeList = mEmployeeFacade.findAll();
             for (MEmployee employee : employeeList) {
                 SelectItem item = new SelectItem();
@@ -87,7 +87,6 @@ public class SearchView extends AbstractView {
                 applyList.add(item);
             }
         } else if (session.isBoss()) {
-            applyList.add(new SelectItem(null, ""));
             List<MEmployee> employeeList = mEmployeeFacade.findBuka(session.getEmpNo());
             for (MEmployee employee : employeeList) {
                 SelectItem item = new SelectItem();

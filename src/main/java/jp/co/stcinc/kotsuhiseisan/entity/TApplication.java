@@ -78,7 +78,7 @@ public class TApplication implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "total_fare")
-    private BigInteger totalFare;
+    private int totalFare;
     @Basic(optional = false)
     @NotNull
     @Column(name = "reject_cnt")
@@ -107,7 +107,7 @@ public class TApplication implements Serializable {
         this.id = id;
     }
 
-    public TApplication(Integer id, int status, int applyId, BigInteger totalFare, int rejectCnt) {
+    public TApplication(Integer id, int status, int applyId, int totalFare, int rejectCnt) {
         this.id = id;
         this.status = status;
         this.applyId = applyId;
@@ -195,11 +195,11 @@ public class TApplication implements Serializable {
         this.paymentDate = paymentDate;
     }
 
-    public BigInteger getTotalFare() {
+    public int getTotalFare() {
         return totalFare;
     }
 
-    public void setTotalFare(BigInteger totalFare) {
+    public void setTotalFare(int totalFare) {
         this.totalFare = totalFare;
     }
 

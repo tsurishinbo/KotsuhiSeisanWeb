@@ -13,18 +13,18 @@
             <p:panelGrid columns="2">
                 <p:outputLabel value="申請日" />
                 <h:panelGroup>
-                    <p:calendar id="apply_date_from" value="#{searchView.applyDateFrom}" locale="ja" pattern="yyyy/MM/dd">
+                    <p:calendar id="apply_date_from" value="#{searchView.applyDateFrom}" locale="ja" pattern="yyyy/MM/dd" size="10">
                         <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
                     </p:calendar>
                     ～
-                    <p:calendar id="apply_date_to" value="#{searchView.applyDateTo}" locale="ja" pattern="yyyy/MM/dd">
+                    <p:calendar id="apply_date_to" value="#{searchView.applyDateTo}" locale="ja" pattern="yyyy/MM/dd" size="10">
                         <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
                     </p:calendar>
                     <p:message for="apply_date_from" />
                     <p:message for="apply_date_to" />
                 </h:panelGroup>
                 <p:outputLabel for="apply_id" value="申請者" />
-                <p:selectOneMenu id="apply_id" style="width:150px" value="#{searchView.applyId}">
+                <p:selectOneMenu id="apply_id" value="#{searchView.applyId}">
                     <f:selectItems value="#{searchView.applyList}" />
                 </p:selectOneMenu>
                 <p:outputLabel for="status" value="ステータス" />

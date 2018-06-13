@@ -39,4 +39,8 @@ public abstract class AbstractView implements Serializable {
                 return null;
         }
     }
+    
+    public String br(String str) {
+        return str.replace("\n","<br/>");
+    }
 }
