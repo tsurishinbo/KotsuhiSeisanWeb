@@ -10,6 +10,7 @@ import jp.co.stcinc.kotsuhiseisan.facade.MEmployeeFacade;
 import jp.co.stcinc.kotsuhiseisan.facade.TApplicationFacade;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 @Named(value = "topView")
 @ViewScoped
@@ -29,17 +30,19 @@ public class TopView extends AbstractView {
     @PostConstruct
     @Override
     public void init() {
+        if (StringUtils.isEmpty(session.getEmail())) {
+            message = "メールアドレスを登録してください。";
+        }
         cntWaitBoss = tApplicationFacade.getCountByStatus(session.getEmpNo(), Constant.STATUS_WAIT_BOSS);
         cntWaitManager = tApplicationFacade.getCountByStatus(session.getEmpNo(), Constant.STATUS_WAIT_MANAGER);
         cntWaitPayment = tApplicationFacade.getCountByStatus(session.getEmpNo(), Constant.STATUS_WAIT_PAYMENT);
     }
     
-    public String doChangeEmail() {
+    public void doChangeEmail() {
         MEmployee employee = mEmployeeFacade.find(session.getEmpNo());
         employee.setEmail(session.getEmail());
         mEmployeeFacade.edit(employee);
         message = "メールアドレスを登録しました。";
-        return null;
     }
     
     public String doTop() {

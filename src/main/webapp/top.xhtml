@@ -11,11 +11,11 @@
                 <f:viewAction action="#{topView.doLoginCheck()}" />
             </f:metadata>
             <p:outputPanel styleClass="message">
-                <h:outputText value="#{topView.message}" />
+                <h:outputText value="#{topView.message}" rendered="#{topView.message != null}" />
             </p:outputPanel>
             <p:outputLabel for="email" value="メールアドレス:" />
-            <p:inputText id="email" value="#{topView.session.email}" readonly="true" style="width:200px;" />
-            <p:commandButton value="変更" ajax="false" action="#{topView.doChangeEmail()}" style="margin-left:10px;" />
+            <p:inputText id="email" value="#{topView.session.email}" style="width:200px;" />
+            <p:commandButton value="設定" update="@form" actionListener="#{topView.doChangeEmail()}" style="margin-left:10px;" />
             <p />
             <p:panelGrid>
                 <p:row>

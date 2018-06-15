@@ -26,15 +26,24 @@
                     <p:separator />
                 </div>
                 <div id="menu">
-                    <p:commandButton styleClass="menubutton" value="トップ" ajax="false" action="#{topView.doTop()}"  />
-                    <p:commandButton styleClass="menubutton" value="申請作成" ajax="false" action="#{topView.doMake()}" />
-                    <p:commandButton styleClass="menubutton" value="申請検索" ajax="false" action="#{topView.doSearch()}" />
-                    <p:commandButton styleClass="menubutton" value="上司承認" ajax="false" action="#{topView.doBossApprove()}" rendered="#{topView.session.boss}" />
-                    <p:commandButton styleClass="menubutton" value="管理部承認" ajax="false" action="#{topView.doManagerApprove()}" rendered="#{topView.session.manager}" />
-                    <p:commandButton styleClass="menubutton" value="支払確定" ajax="false" action="#{topView.doPayment()}" rendered="#{topView.session.manager}" />
-                    <p:commandButton styleClass="menubutton" value="精算書" ajax="false" action="#{topView.doReport()}" rendered="#{topView.session.manager}" />
-                    <p:commandButton styleClass="menubutton" value="月次締め" ajax="false" action="#{topView.doMonthly()}" rendered="#{topView.session.manager}" />
-                    <p:commandButton styleClass="menubutton" value="ログアウト" ajax="false" action="#{topView.doLogout()}" />
+                    <p:commandButton styleClass="menubutton" value="トップ" ajax="false" immediate="true"
+                                     action="#{topView.doTop()}"  />
+                    <p:commandButton styleClass="menubutton" value="申請作成" ajax="false" immediate="true"
+                                     action="#{topView.doMake()}" />
+                    <p:commandButton styleClass="menubutton" value="申請検索" ajax="false" immediate="true"
+                                     action="#{topView.doSearch()}" />
+                    <p:commandButton styleClass="menubutton" value="上司承認" ajax="false" immediate="true"
+                                     action="#{topView.doBossApprove()}" rendered="#{topView.session.boss}" />
+                    <p:commandButton styleClass="menubutton" value="管理部承認" ajax="false" immediate="true"
+                                     action="#{topView.doManagerApprove()}" rendered="#{topView.session.manager}" />
+                    <p:commandButton styleClass="menubutton" value="支払確定" ajax="false" immediate="true"
+                                     action="#{topView.doPayment()}" rendered="#{topView.session.manager}" />
+                    <p:commandButton styleClass="menubutton" value="精算書" ajax="false" immediate="true"
+                                     action="#{topView.doReport()}" rendered="#{topView.session.manager}" />
+                    <p:commandButton styleClass="menubutton" value="月次締め" ajax="false" immediate="true"
+                                     action="#{topView.doMonthly()}" rendered="#{topView.session.manager}" />
+                    <p:commandButton styleClass="menubutton" value="ログアウト" ajax="false" immediate="true" 
+                                     action="#{topView.doLogout()}" />
                 </div>
                 <div id="content">
                     <ui:insert name="content" />

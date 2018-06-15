@@ -10,12 +10,8 @@ public class Constant {
     public static final int STATUS_WAIT_PAID = 4;
 
     public static final int MAKE_MODE_NEW = 1;
-    public static final int MAKE_MODE_EDIT = 2;
+    public static final int MAKE_MODE_MODIFY = 2;
     
-    public static final int LINE_KIND_ADD = 1;
-    public static final int LINE_KIND_UPD = 2;
-    public static final int LINE_KIND_DEL = 3;
-
     public static final String PARAM_MAKE_ID = "param_make_id";
     
     public static final String PARAM_SEARCH_ID = "param_search_id";

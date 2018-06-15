@@ -1,7 +1,6 @@
 package jp.co.stcinc.kotsuhiseisan.entity;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -24,19 +23,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "t_line")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TLine.findAll", query = "SELECT t FROM TLine t ORDER BY t.id")
-    , @NamedQuery(name = "TLine.findById", query = "SELECT t FROM TLine t WHERE t.id = :id ORDER BY t.id")
-    , @NamedQuery(name = "TLine.findByApplicationId", query = "SELECT t FROM TLine t WHERE t.applicationId = :applicationId ORDER BY t.id")
-    , @NamedQuery(name = "TLine.findByUsedDate", query = "SELECT t FROM TLine t WHERE t.usedDate = :usedDate ORDER BY t.id")
-    , @NamedQuery(name = "TLine.findByOrderId", query = "SELECT t FROM TLine t WHERE t.orderId = :orderId ORDER BY t.id")
-    , @NamedQuery(name = "TLine.findByPlace", query = "SELECT t FROM TLine t WHERE t.place = :place ORDER BY t.id")
-    , @NamedQuery(name = "TLine.findByPurpose", query = "SELECT t FROM TLine t WHERE t.purpose = :purpose ORDER BY t.id")
-    , @NamedQuery(name = "TLine.findByMeansId", query = "SELECT t FROM TLine t WHERE t.meansId = :meansId ORDER BY t.id")
-    , @NamedQuery(name = "TLine.findBySectionFrom", query = "SELECT t FROM TLine t WHERE t.sectionFrom = :sectionFrom ORDER BY t.id")
-    , @NamedQuery(name = "TLine.findBySectionTo", query = "SELECT t FROM TLine t WHERE t.sectionTo = :sectionTo ORDER BY t.id")
-    , @NamedQuery(name = "TLine.findByIsRoundtrip", query = "SELECT t FROM TLine t WHERE t.isRoundtrip = :isRoundtrip ORDER BY t.id")
-    , @NamedQuery(name = "TLine.findByFare", query = "SELECT t FROM TLine t WHERE t.fare = :fare ORDER BY t.id")
-    , @NamedQuery(name = "TLine.findByMemo", query = "SELECT t FROM TLine t WHERE t.memo = :memo ORDER BY t.id")})
+    @NamedQuery(name = "TLine.findAll", query = "SELECT t FROM TLine t ORDER BY t.sortNo")
+    , @NamedQuery(name = "TLine.findById", query = "SELECT t FROM TLine t WHERE t.id = :id ORDER BY t.sortNo")
+    , @NamedQuery(name = "TLine.findByApplicationId", query = "SELECT t FROM TLine t WHERE t.applicationId = :applicationId ORDER BY t.sortNo")
+    , @NamedQuery(name = "TLine.findByUsedDate", query = "SELECT t FROM TLine t WHERE t.usedDate = :usedDate ORDER BY t.sortNo")
+    , @NamedQuery(name = "TLine.findByOrderId", query = "SELECT t FROM TLine t WHERE t.orderId = :orderId ORDER BY t.sortNo")
+    , @NamedQuery(name = "TLine.findByPlace", query = "SELECT t FROM TLine t WHERE t.place = :place ORDER BY t.sortNo")
+    , @NamedQuery(name = "TLine.findByPurpose", query = "SELECT t FROM TLine t WHERE t.purpose = :purpose ORDER BY t.sortNo")
+    , @NamedQuery(name = "TLine.findByMeansId", query = "SELECT t FROM TLine t WHERE t.meansId = :meansId ORDER BY t.sortNo")
+    , @NamedQuery(name = "TLine.findBySectionFrom", query = "SELECT t FROM TLine t WHERE t.sectionFrom = :sectionFrom ORDER BY t.sortNo")
+    , @NamedQuery(name = "TLine.findBySectionTo", query = "SELECT t FROM TLine t WHERE t.sectionTo = :sectionTo ORDER BY t.sortNo")
+    , @NamedQuery(name = "TLine.findByIsRoundtrip", query = "SELECT t FROM TLine t WHERE t.isRoundtrip = :isRoundtrip ORDER BY t.sortNo")
+    , @NamedQuery(name = "TLine.findByFare", query = "SELECT t FROM TLine t WHERE t.fare = :fare ORDER BY t.sortNo")
+    , @NamedQuery(name = "TLine.findByMemo", query = "SELECT t FROM TLine t WHERE t.memo = :memo ORDER BY t.sortNo")
+    , @NamedQuery(name = "TLine.findBySortNo", query = "SELECT t FROM TLine t WHERE t.sortNo = :sortNo ORDER BY t.sortNo")})
 public class TLine implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -92,6 +92,10 @@ public class TLine implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "memo")
     private String memo;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "sort_no")
+    private int sortNo;
     @OneToOne
     @JoinColumn(name = "means_id", referencedColumnName = "id", insertable = false, updatable = false)
     private MMeans means;
@@ -106,7 +110,7 @@ public class TLine implements Serializable {
         this.id = id;
     }
 
-    public TLine(Integer id, int applicationId, Date usedDate, String place, String purpose, int meansId, String sectionFrom, String sectionTo, int isRoundtrip, int fare) {
+    public TLine(Integer id, int applicationId, Date usedDate, String place, String purpose, int meansId, String sectionFrom, String sectionTo, int isRoundtrip, int fare, int sortNo) {
         this.id = id;
         this.applicationId = applicationId;
         this.usedDate = usedDate;
@@ -117,6 +121,7 @@ public class TLine implements Serializable {
         this.sectionTo = sectionTo;
         this.isRoundtrip = isRoundtrip;
         this.fare = fare;
+        this.sortNo = sortNo;
     }
 
     public Integer getId() {
@@ -213,6 +218,14 @@ public class TLine implements Serializable {
 
     public void setMemo(String memo) {
         this.memo = memo;
+    }
+
+    public int getSortNo() {
+        return sortNo;
+    }
+
+    public void setSortNo(int sortNo) {
+        this.sortNo = sortNo;
     }
 
     public MMeans getMeans() {

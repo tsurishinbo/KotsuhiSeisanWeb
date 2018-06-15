@@ -38,7 +38,7 @@
                 </p:selectOneRadio>
             </p:panelGrid>
             <p />
-            <p:commandButton styleClass="cmdbutton" value="検索" ajax="false" action="#{searchView.doSearch()}" />
+            <p:commandButton styleClass="cmdbutton" value="検索" ajax="true" update="@form" actionListener="#{searchView.doSearch()}" />
             <ui:fragment rendered="#{searchView.applicationList != null}">
                 <p:separator />
                 <p:dataTable var="app" value="#{searchView.applicationList}">

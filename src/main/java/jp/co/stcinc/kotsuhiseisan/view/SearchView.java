@@ -60,9 +60,8 @@ public class SearchView extends AbstractView {
         setApplyList();
     }
     
-    public String doSearch() {
+    public void doSearch() {
         setApplicationList();
-        return null;
     }
     
     public String doReference(Integer id) {

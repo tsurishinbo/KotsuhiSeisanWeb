@@ -10,7 +10,7 @@
     </h:head>
     <h:body>
         <h:form>
-            <p:outputPanel styleClass="message">
+            <p:outputPanel styleClass="message" rendered="#{loginView.message != null}">
                 <h:outputText value="#{loginView.message}" />
             </p:outputPanel>
             <p:messages />

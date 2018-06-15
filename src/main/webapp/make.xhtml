@@ -7,103 +7,218 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <ui:composition template="./templates/template.xhtml">
         <ui:define name="content">
+            <h:outputScript>
+            </h:outputScript>
             <f:metadata>
                 <f:viewAction action="#{makeView.doLoginCheck()}" />
             </f:metadata>
             <p:outputPanel styleClass="message">
-                <h:outputText value="#{makeView.message}" />
+                <h:outputText value="#{makeView.message}" rendered="#{makeView.message != null}" />
             </p:outputPanel>
-            
+            <p:outputLabel for="boss" value="承認者:" />
+            <p:selectOneMenu id="boss" value="#{makeView.bossId}">
+                <f:selectItems value="#{makeView.bossList}" />
+            </p:selectOneMenu>
             <p />
-            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="新規追加" ajax="false" 
-                             action="#{makeView.doAdd()}" immediate="true" />
-            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="保存" ajax="false"
-                             action="#{makeView.doSave()}" onclick="return confirm('この内容を保存します。')" />
-            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="申請" ajax="false"
-                             action="#{makeView.doApply()}" onclick="return confirm('この内容を申請します。')" />
-            <ui:repeat var="lineDto" value="#{makeView.lineDtoList}">
-                <ui:fragment rendered="#{makeView.isEnabled(lineDto)}">
+            <p:panelGrid>
+                <p:row>
+                    <p:column styleClass="line_header">利用日</p:column>
+                    <p:column styleClass="line_value">
+                        <p:calendar id="used_date" value="#{makeView.editEntry.usedDate}" locale="ja" pattern="yyyy/MM/dd" size="10">
+                            <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
+                        </p:calendar>
+                        <p:message for="used_date" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="line_header">作業</p:column>
+                    <p:column styleClass="line_value">
+                        <p:selectOneMenu id="order" value="#{makeView.editEntry.orderId}">
+                            <f:selectItems value="#{makeView.orderList}" />
+                        </p:selectOneMenu>
+                        <p:message for="order" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="line_header">出張内容</p:column>
+                    <p:column styleClass="line_value">
+                        <p:inputText id="purpose" style="width:300px;" value="#{makeView.editEntry.purpose}" />
+                        <p:message for="purpose" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="line_header">出張場所</p:column>
+                    <p:column styleClass="line_value">
+                        <p:inputText id="place" style="width:300px;" value="#{makeView.editEntry.place}" />
+                        <p:message for="place" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="line_header">交通手段</p:column>
+                    <p:column styleClass="line_value">
+                        <p:selectOneRadio id="means" value="#{makeView.editEntry.meansId}">
+                            <f:selectItems value="#{makeView.meansList}" />
+                        </p:selectOneRadio>
+                        <p:message for="means" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="line_header">出発地</p:column>
+                    <p:column styleClass="line_value">
+                        <p:inputText id="section_from" style="width:200px;" value="#{makeView.editEntry.sectionFrom}" />
+                        <p:message for="section_from" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="line_header">到着地</p:column>
+                    <p:column styleClass="line_value">
+                        <p:inputText id="section_to" style="width:200px;" value="#{makeView.editEntry.sectionTo}" />
+                        <p:message for="section_to" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="line_header">片道料金</p:column>
+                    <p:column styleClass="line_value">
+                        <p:inputNumber id="one_way_fee" style="width:100px;" value="#{makeView.editEntry.oneWayFee}"
+                                       maxValue="999999" decimalPlaces="0" thousandSeparator="">
+                            <p:ajax update="fare" />
+                        </p:inputNumber>
+                        <p:selectBooleanCheckbox value="#{makeView.editEntry.roundtrip}" itemLabel="往復" style="margin-left:10px;">
+                            <p:ajax update="fare" />
+                        </p:selectBooleanCheckbox>
+                        <p:message for="one_way_fee" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="line_header">申請料金</p:column>
+                    <p:column styleClass="line_value">
+                        <h:outputText id="fare" value="#{makeView.getFare()}" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="line_header">備考</p:column>
+                    <p:column styleClass="line_value">
+                        <p:inputTextarea id="memo" value="#{makeView.editEntry.memo}" cols="50" rows="2" />
+                        <p:message for="memo" /> 
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            <p />
+            <p:commandButton styleClass="cndbutton" style="margin-right:5px;" value="明細追加" 
+                             update="@form" 
+                             disabled="#{makeView.disabledButton}"
+                             actionListener="#{makeView.doAdd()}" />
+            <p:commandButton styleClass="cndbutton" style="margin-right:5px;" value="明細更新" 
+                             update="@form" 
+                             disabled="#{!makeView.disabledButton}"
+                             actionListener="#{makeView.doUpdate()}" />
+            <p:commandButton styleClass="cndbutton" style="margin-right:5px;" value="明細更新キャンセル" 
+                             update="@form" 
+                             disabled="#{!makeView.disabledButton}" 
+                             actionListener="#{makeView.doUpdateCancel()}" />
+            <ui:repeat var="entry" value="#{makeView.entryList}">
+                <ui:fragment rendered="#{!entry.deleted}">
                     <p:separator styleClass="dashed_line" />
                     <p:panelGrid>
                         <p:row>
                             <p:column styleClass="line_header">利用日</p:column>
-                            <p:column styleClass="line_value">
-                                <p:calendar value="#{lineDto.usedDate}" locale="ja" pattern="yyyy/MM/dd" size="10">
+                            <p:column styleClass="line_value" style="#{makeView.getStyle(entry)}">
+                                <h:outputText value="#{entry.usedDate}">
                                     <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
-                                </p:calendar>
+                                </h:outputText>
                             </p:column>
                         </p:row>
                         <p:row>
                             <p:column styleClass="line_header">作業</p:column>
-                            <p:column styleClass="line_value">
-                                <p:selectOneMenu value="#{lineDto.orderId}">
-                                    <f:selectItems value="#{makeView.orderList}" />
-                                </p:selectOneMenu>
+                            <p:column styleClass="line_value" style="#{makeView.getStyle(entry)}">
+                                <h:outputText value="#{entry.orderId}" />
+                                <h:outputText value=":" rendered="#{entry.orderId != null}" />
+                                <h:outputText value="#{makeView.getOrderName(entry.orderId)}" rendered="#{entry.orderId != null}" />
                             </p:column>
                         </p:row>
                         <p:row>
                             <p:column styleClass="line_header">出張内容</p:column>
-                            <p:column styleClass="line_value">
-                                <p:inputText style="width:300px;" value="#{lineDto.purpose}" />
+                            <p:column styleClass="line_value" style="#{makeView.getStyle(entry)}">
+                                <h:outputText value="#{entry.purpose}" />
                             </p:column>
                         </p:row>
                         <p:row>
                             <p:column styleClass="line_header">出張場所</p:column>
-                            <p:column styleClass="line_value">
-                                <p:inputText style="width:300px;" value="#{lineDto.place}" />
+                            <p:column styleClass="line_value" style="#{makeView.getStyle(entry)}">
+                                <h:outputText value="#{entry.place}" />
                             </p:column>
                         </p:row>
                         <p:row>
                             <p:column styleClass="line_header">交通手段</p:column>
-                            <p:column styleClass="line_value">
-                                <p:selectOneRadio value="#{lineDto.meansId}">
-                                    <f:selectItems value="#{makeView.meansList}" />
-                                </p:selectOneRadio>
+                            <p:column styleClass="line_value" style="#{makeView.getStyle(entry)}">
+                                <h:outputText value="#{makeView.getMeansName(entry.meansId)}" />
                             </p:column>
                         </p:row>
                         <p:row>
-                            <p:column styleClass="line_header">出発地</p:column>
-                            <p:column styleClass="line_value">
-                                <p:inputText style="width:200px;" value="#{lineDto.sectionFrom}" />
+                            <p:column styleClass="line_header">区間</p:column>
+                            <p:column styleClass="line_value" style="#{makeView.getStyle(entry)}">
+                                <h:outputText value="#{entry.sectionFrom}" />
+                                <h:outputText value="⇒" rendered="#{!entry.roundtrip}" />
+                                <h:outputText value="⇔" rendered="#{entry.roundtrip}" />
+                                <h:outputText value="#{entry.sectionTo}" />
                             </p:column>
                         </p:row>
                         <p:row>
-                            <p:column styleClass="line_header">到着地</p:column>
-                            <p:column styleClass="line_value">
-                                <p:inputText style="width:200px;" value="#{lineDto.sectionTo}" />
-                            </p:column>
-                        </p:row>
-                        <p:row>
-                            <p:column styleClass="line_header">片道料金</p:column>
-                            <p:column styleClass="line_value">
-                                <p:inputNumber style="width:100px;" value="#{lineDto.oneWayFee}" minValue="0" maxValue="999999" decimalPlaces="0" thousandSeparator="">
-                                    <p:ajax update="fare" />
-                                </p:inputNumber>
-                                <p:selectBooleanCheckbox value="#{lineDto.roundtrip}" itemLabel="往復" style="margin-left:10px;">
-                                    <p:ajax update="fare" />
-                                </p:selectBooleanCheckbox>
-                            </p:column>
-                        </p:row>
-                        <p:row>
-                            <p:column styleClass="line_header">申請料金</p:column>
-                            <p:column styleClass="line_value">
-                                <h:outputText id="fare" value="#{makeView.getFare(lineDto.oneWayFee, lineDto.roundtrip)}" />
+                            <p:column styleClass="line_header">料金</p:column>
+                            <p:column styleClass="line_value" style="#{makeView.getStyle(entry)}">
+                                <h:outputText value="#{entry.oneWayFee}" rendered="#{!entry.roundtrip}">
+                                    <f:convertNumber pattern="#,##0" />
+                                </h:outputText>
+                                <h:outputText value="#{entry.oneWayFee * 2}" rendered="#{entry.roundtrip}">
+                                    <f:convertNumber pattern="#,##0" />
+                                </h:outputText>
+                                &nbsp;円
                             </p:column>
                         </p:row>
                         <p:row>
                             <p:column styleClass="line_header">備考</p:column>
-                            <p:column styleClass="line_value">
-                                <p:inputTextarea value="#{lineDto.memo}" cols="50" rows="2" />
+                            <p:column styleClass="line_value" style="#{makeView.getStyle(entry)}">
+                                <h:outputText value="#{makeView.br(entry.memo)}" escape="false" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column styleClass="line_header">操作</p:column>
+                            <p:column styleClass="line_value" style="#{makeView.getStyle(entry)}">
+                                <p:commandButton styleClass="cndbutton" style="margin-right:5px;" value="編集" 
+                                                 update="@form" 
+                                                 process="@this" 
+                                                 disabled="#{makeView.disabledButton}" 
+                                                 actionListener="#{makeView.doEdit(entry)}" />
+                                <p:commandButton styleClass="cndbutton" style="margin-right:5px;" value="削除" 
+                                                 update="@form" 
+                                                 process="@this" 
+                                                 disabled="#{makeView.disabledButton}" 
+                                                 actionListener="#{makeView.doDelete(entry)}" 
+                                                 onclick="return confirm('この明細を削除します。')" />
+                                <p:commandButton styleClass="cndbutton" style="margin-right:5px;" value="コピー" 
+                                                 update="@form" 
+                                                 process="@this" 
+                                                 disabled="#{makeView.disabledButton}" 
+                                                 actionListener="#{makeView.doCopy(entry)}" 
+                                                 onclick="return confirm('この明細をコピーします。')" />
                             </p:column>
                         </p:row>
                     </p:panelGrid>
-                    <p />
-                    <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="削除" ajax="false" immediate="true"
-                                     action="#{makeView.doDelete(lineDto)}" onclick="return confirm('申請を削除します。')" />
-                    <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="コピー" ajax="false" immediate="true"
-                                     action="#{makeView.doCopy(lineDto)}" onclick="return confirm('申請をコピーします。')" />
                 </ui:fragment>
             </ui:repeat>
+            <p:separator />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="保存" 
+                             ajax="false" 
+                             immediate="true"
+                             disabled="#{makeView.disabledSaveButton}"
+                             action="#{makeView.doSave()}" 
+                             onclick="return confirm('この内容を保存します。')" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="申請" 
+                             ajax="false" 
+                             immediate="true"
+                             disabled="#{makeView.disabledSaveButton}"
+                             action="#{makeView.doApply()}" 
+                             onclick="return confirm('この内容を申請します。')" />
             <p />
         </ui:define>
     </ui:composition>
