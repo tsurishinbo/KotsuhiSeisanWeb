@@ -89,4 +89,23 @@ public class MEmployeeFacade extends AbstractFacade<MEmployee> {
         List<MEmployee> employeeList = query.getResultList();
         return employeeList;
     }
+    
+    public List<MEmployee> findBukaManager(final Integer id) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("WITH RECURSIVE temp(id, employee_name, boss_id) AS ( ");
+        sql.append("SELECT id, employee_name, boss_id ");
+        sql.append("FROM m_employee ");
+        sql.append("WHERE id = ?1 ");
+        sql.append("UNION ");
+        sql.append("SELECT m.id, m.employee_name, m.boss_id ");
+        sql.append("FROM m_employee m, temp t ");
+        sql.append("WHERE m.boss_id = t.id ");
+        sql.append("AND m.is_boss = 1 ");
+        sql.append(") ");
+        sql.append("SELECT id, employee_name FROM temp ORDER BY id ");
+        Query query = em.createNativeQuery(sql.toString(), MEmployee.class);
+        query.setParameter(1, id);
+        List<MEmployee> employeeList = query.getResultList();
+        return employeeList;
+    }
 }

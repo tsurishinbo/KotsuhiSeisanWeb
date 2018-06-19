@@ -57,7 +57,7 @@ public class SearchView extends AbstractView {
             status = -1;
             applicationList = null;
         }
-        setApplyList();
+        setApplicantList();
     }
     
     public void doSearch() {
@@ -74,7 +74,7 @@ public class SearchView extends AbstractView {
         return "reference.xhtml?faces-redirect=true";
     }
     
-    private void setApplyList() {
+    private void setApplicantList() {
         applyList = new ArrayList<>();
         applyList.add(new SelectItem(null, ""));
         if (session.isManager()) {

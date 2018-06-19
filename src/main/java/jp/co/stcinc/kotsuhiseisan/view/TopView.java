@@ -58,7 +58,7 @@ public class TopView extends AbstractView {
     }
     
     public String doBossApprove() {
-        return null;
+        return "boss_approve_list.xhtml?faces-redirect=true";
     }
     
     public String doManagerApprove() {

@@ -99,6 +99,10 @@ public class TApplication implements Serializable {
     @JoinColumn(name = "application_id", referencedColumnName = "id")
     @OrderBy("sortNo")
     private List<TLine> lines;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "application_id", referencedColumnName = "id")
+    @OrderBy("id")
+    private List<TReject> reject;
 
     public TApplication() {
     }
@@ -251,6 +255,14 @@ public class TApplication implements Serializable {
         this.lines = lines;
     }
 
+    public List<TReject> getReject() {
+        return reject;
+    }
+
+    public void setReject(List<TReject> reject) {
+        this.reject = reject;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

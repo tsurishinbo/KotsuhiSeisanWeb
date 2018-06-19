@@ -168,7 +168,7 @@ public class ReferenceView extends AbstractView {
     public boolean isEnabledReport() {
         if (session.isManager()
                 && (application.getStatus() == Constant.STATUS_WAIT_PAYMENT || 
-                    application.getStatus() == Constant.STATUS_WAIT_PAID)) {
+                    application.getStatus() == Constant.STATUS_PAID)) {
             return true;
         }
         return false;

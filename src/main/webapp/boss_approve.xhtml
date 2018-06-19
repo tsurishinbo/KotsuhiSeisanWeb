@@ -9,79 +9,50 @@
     <ui:composition template="./templates/template.xhtml">
         <ui:define name="content">
             <f:metadata>
-                <f:viewAction action="#{referenceView.doLoginCheck()}" />
+                <f:viewAction action="#{bossApproveView.doLoginCheck()}" />
             </f:metadata>
             <p:panelGrid>
                 <p:row>
                     <p:column styleClass="reference_header">申請ID</p:column>
                     <p:column styleClass="reference_value">
-                        <h:outputText value="#{referenceView.application.id}" />
+                        <h:outputText value="#{bossApproveView.application.id}" />
                     </p:column>
                     <p:column styleClass="reference_header">ステータス</p:column>
                     <p:column styleClass="reference_value">
-                        <h:outputText value="#{referenceView.getStatusName(referenceView.application.status)}" />
+                        <h:outputText value="#{bossApproveView.getStatusName(bossApproveView.application.status)}" />
                     </p:column>
                 </p:row>
                 <p:row>
                     <p:column styleClass="reference_header">申請者</p:column>
                     <p:column styleClass="reference_value">
-                        <h:outputText value="#{referenceView.application.applicant.employeeName}" />
+                        <h:outputText value="#{bossApproveView.application.applicant.employeeName}" />
                     </p:column>
                     <p:column styleClass="reference_header">申請日</p:column>
                     <p:column styleClass="reference_value">
-                        <h:outputText value="#{referenceView.application.applyDate}">
-                            <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
-                        </h:outputText>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column styleClass="reference_header">承認者</p:column>
-                    <p:column styleClass="reference_value">
-                        <h:outputText value="#{referenceView.application.boss.employeeName}" />
-                    </p:column>
-                    <p:column styleClass="reference_header">承認日</p:column>
-                    <p:column styleClass="reference_value">
-                        <h:outputText value="#{referenceView.application.bossApproveDate}">
-                            <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
-                        </h:outputText>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column styleClass="reference_header">管理部承認者</p:column>
-                    <p:column styleClass="reference_value">
-                        <h:outputText value="#{referenceView.application.manager.employeeName}" />
-                    </p:column>
-                    <p:column styleClass="reference_header">管理部承認日</p:column>
-                    <p:column styleClass="reference_value">
-                        <h:outputText value="#{referenceView.application.managerApproveDate}">
-                            <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
-                        </h:outputText>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column styleClass="reference_header">支払者</p:column>
-                    <p:column styleClass="reference_value">
-                        <h:outputText value="#{referenceView.application.payer.employeeName}" />
-                    </p:column>
-                    <p:column styleClass="reference_header">支払日</p:column>
-                    <p:column styleClass="reference_value">
-                        <h:outputText value="#{referenceView.application.paymentDate}">
+                        <h:outputText value="#{bossApproveView.application.applyDate}">
                             <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
                         </h:outputText>
                     </p:column>
                 </p:row>
                 <p:row>
                     <p:column styleClass="reference_header">合計料金</p:column>
-                    <p:column styleClass="reference_value">
-                        <h:outputText value="#{referenceView.application.totalFare}">
+                    <p:column styleClass="reference_value" colspan="3">
+                        <h:outputText value="#{bossApproveView.application.totalFare}">
                             <f:convertNumber pattern="#,##0" />
                         </h:outputText>
                         &nbsp;円
                     </p:column>
                 </p:row>
+                <p:row>
+                    <p:column styleClass="reference_header">差戻し理由</p:column>
+                    <p:column styleClass="reference_value" colspan="3">
+                        <p:inputTextarea id="comment" value="#{bossApproveView.comment}" cols="50" rows="2" />
+                        <p:message for="comment" /> 
+                    </p:column>
+                </p:row>
             </p:panelGrid>
             <h4>■明細</h4>
-            <ui:repeat var="line" value="#{referenceView.application.lines}">
+            <ui:repeat var="line" value="#{bossApproveView.application.lines}">
                 <p:panelGrid>
                     <p:row>
                         <p:column styleClass="line_header">利用日</p:column>
@@ -173,27 +144,12 @@
                 <p />
             </ui:repeat>
             <p />
-            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="編集" ajax="false" 
-                             action="#{referenceView.doEdit()}" rendered="#{referenceView.enabledEdit}" />
-            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="削除" ajax="false" 
-                             action="#{referenceView.doDelete()}" rendered="#{referenceView.enabledDelete}"
-                             onclick="return confirm('申請を削除します。')" />
-            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="コピー" ajax="false" 
-                             action="#{referenceView.doCopy()}" rendered="#{referenceView.enabledCopy}"
-                             onclick="return confirm('申請をコピーします。')" />
-            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="申請取消" ajax="false" 
-                             action="#{referenceView.doCancelApply()}" rendered="#{referenceView.enabledCancelApply}"
-                             onclick="return confirm('申請を取消します。')" />
-            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="上司承認取消" ajax="false" 
-                             action="#{referenceView.doCancelBossApprove()}" rendered="#{referenceView.enabledCancelBossApprove}"
-                             onclick="return confirm('上申承認を取消します。')" />
-            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="管理部承認取消" ajax="false" 
-                             action="#{referenceView.doCancelManagerApprove()}" rendered="#{referenceView.enabledCancelManagerApprove}"
-                             onclick="return confirm('管理部承認を取消します。')" />
-            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="精算書出力" ajax="false" 
-                             action="#{referenceView.doReport()}" rendered="#{referenceView.enabledReport}" />
-            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="戻る" ajax="false" 
-                             action="#{referenceView.doReturn()}" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="承認" ajax="false" immediate="true"
+                             action="#{bossApproveView.doApprove()}" onclick="return confirm('申請を承認します。')" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="差戻し" ajax="false" 
+                             action="#{bossApproveView.doReject()}" onclick="return confirm('申請を差戻します。')" />
+            <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="戻る" ajax="false" immediate="true"
+                             action="#{bossApproveView.doReturn()}" />
             <p />
         </ui:define>
     </ui:composition>

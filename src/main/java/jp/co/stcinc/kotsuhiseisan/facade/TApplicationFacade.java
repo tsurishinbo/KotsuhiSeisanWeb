@@ -77,4 +77,26 @@ public class TApplicationFacade extends AbstractFacade<TApplication> {
         List<TApplication> applicationList = query.getResultList();
         return applicationList;
     }
+    
+    public List<TApplication> findBossApprove(final Integer bossId) {
+        StringBuilder jpql = new StringBuilder();
+        jpql.append("SELECT t ");
+        jpql.append("FROM TApplication t ");
+        jpql.append("WHERE t.status = :status ");
+        jpql.append("AND t.bossApproveId = :bossApproveId ");
+        jpql.append("ORDER BY t.applyDate, t.applyId ");
+        
+        Query query = em.createQuery(jpql.toString(), TApplication.class);
+        query.setParameter("status", Constant.STATUS_WAIT_BOSS);
+        query.setParameter("bossApproveId", bossId);
+        List<TApplication> applicationList = query.getResultList();
+        return applicationList;
+    }
+    
+    public List<TApplication> findManagerApprove() {
+        Query query = em.createNamedQuery("TApplication.findByStatus", TApplication.class);
+        query.setParameter("status", Constant.STATUS_WAIT_MANAGER);
+        List<TApplication> applicationList = query.getResultList();
+        return applicationList;
+    }
 }

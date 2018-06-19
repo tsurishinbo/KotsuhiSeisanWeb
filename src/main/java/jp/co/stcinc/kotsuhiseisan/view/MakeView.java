@@ -1,10 +1,7 @@
 package jp.co.stcinc.kotsuhiseisan.view;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
@@ -13,6 +10,7 @@ import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import jp.co.stcinc.kotsuhiseisan.common.Constant;
+import jp.co.stcinc.kotsuhiseisan.common.DateUtils;
 import jp.co.stcinc.kotsuhiseisan.common.LineDto;
 import jp.co.stcinc.kotsuhiseisan.entity.MEmployee;
 import jp.co.stcinc.kotsuhiseisan.entity.MMeans;
@@ -26,7 +24,6 @@ import jp.co.stcinc.kotsuhiseisan.facade.TApplicationFacade;
 import jp.co.stcinc.kotsuhiseisan.facade.TLineFacade;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.time.DateUtils;
 
 @Named(value = "makeView")
 @ViewScoped
@@ -134,7 +131,7 @@ public class MakeView extends AbstractView {
             TApplication app = new TApplication();
             app.setStatus(Constant.STATUS_WAIT_BOSS);
             app.setApplyId(session.getEmpNo());
-            app.setApplyDate(getToday());
+            app.setApplyDate(DateUtils.getToday());
             app.setBossApproveId(bossId);
             app.setTotalFare(getTotalFare());
             app.setLines(makeAddLines());
@@ -142,7 +139,7 @@ public class MakeView extends AbstractView {
         } else if (mode == Constant.MAKE_MODE_MODIFY) {
             TApplication app = tApplicationFacade.find(applicationId);
             app.setStatus(Constant.STATUS_WAIT_BOSS);
-            app.setApplyDate(getToday());
+            app.setApplyDate(DateUtils.getToday());
             app.setBossApproveId(bossId);
             app.setTotalFare(getTotalFare());
             tApplicationFacade.edit(app);
@@ -249,13 +246,6 @@ public class MakeView extends AbstractView {
             }
         }
         return totalFare;
-    }
-    
-    private Date getToday() {
-        TimeZone tz = TimeZone.getTimeZone("Asia/Tokyo");
-        Calendar c = Calendar.getInstance(tz);
-        Date today = DateUtils.truncate(c.getTime(), Calendar.DAY_OF_MONTH);
-        return today;
     }
     
     private boolean checkNoLine() {
