@@ -62,11 +62,11 @@ public class TopView extends AbstractView {
     }
     
     public String doManagerApprove() {
-        return null;
+        return "manager_approve_list.xhtml?faces-redirect=true";
     }
     
     public String doPayment() {
-        return null;
+        return "payment.xhtml?faces-redirect=true";
     }
     
     public String doReport() {

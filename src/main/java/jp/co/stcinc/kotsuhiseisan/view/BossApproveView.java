@@ -1,5 +1,6 @@
 package jp.co.stcinc.kotsuhiseisan.view;
 
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
@@ -12,7 +13,6 @@ import jp.co.stcinc.kotsuhiseisan.common.DateUtils;
 import jp.co.stcinc.kotsuhiseisan.entity.TApplication;
 import jp.co.stcinc.kotsuhiseisan.entity.TReject;
 import jp.co.stcinc.kotsuhiseisan.facade.TApplicationFacade;
-import jp.co.stcinc.kotsuhiseisan.facade.TRejectFacade;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,8 +30,6 @@ public class BossApproveView extends AbstractView {
     private String comment;
     @EJB
     private TApplicationFacade tApplicationFacade;
-    @EJB
-    private TRejectFacade tRejectFacade;
     
     @PostConstruct
     @Override
@@ -54,15 +52,17 @@ public class BossApproveView extends AbstractView {
     }
     
     public String doReject() {
+        List<TReject> rejectList = application.getReject();
         TReject reject = new TReject();
         reject.setApplicationId(id);
         reject.setRejectId(session.getEmpNo());
         reject.setRejectDate(DateUtils.getToday());
         reject.setComment(comment);
-        tRejectFacade.create(reject);
+        rejectList.add(reject);
         application.setStatus(Constant.STATUS_SAVE);
         application.setApplyDate(null);
         application.setRejectCnt(application.getRejectCnt() + 1);
+        application.setReject(rejectList);
         tApplicationFacade.edit(application);
         setFlash();
         return "boss_approve_list.xhtml?faces-rediect=true";

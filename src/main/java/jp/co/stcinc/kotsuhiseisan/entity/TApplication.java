@@ -1,7 +1,6 @@
 package jp.co.stcinc.kotsuhiseisan.entity;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;

@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:composition template="./templates/template.xhtml">
+        <ui:define name="content">
+            <f:metadata>
+                <f:viewAction action="#{managerApproveListView.doLoginCheck()}" />
+            </f:metadata>
+            <p:dataTable var="app" value="#{managerApproveListView.applicationList}">
+                <p:column headerText="申請ID">
+                    <h:outputText value="#{app.id}" />
+                </p:column>
+                <p:column headerText="申請者">
+                    <h:outputText value="#{app.applicant.employeeName}" />
+                </p:column>
+                <p:column headerText="承認者">
+                    <h:outputText value="#{app.boss.employeeName}" />
+                </p:column>
+                <p:column headerText="申請日">
+                    <h:outputText value="#{app.applyDate}">
+                        <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="承認日">
+                    <h:outputText value="#{app.bossApproveDate}">
+                        <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="合計料金">
+                    <h:outputText value="#{app.totalFare}">
+                        <f:convertNumber pattern="#,##0" />
+                    </h:outputText>
+                </p:column>
+                <p:column>
+                    <p:commandButton value="詳細" ajax="false" icon="ui-icon-search" action="#{managerApproveListView.doReference(app.id)}" />
+                </p:column>
+            </p:dataTable>
+        </ui:define>
+    </ui:composition>
+</html>

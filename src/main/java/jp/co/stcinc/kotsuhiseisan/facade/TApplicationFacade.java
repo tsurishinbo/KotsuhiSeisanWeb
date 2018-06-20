@@ -99,4 +99,11 @@ public class TApplicationFacade extends AbstractFacade<TApplication> {
         List<TApplication> applicationList = query.getResultList();
         return applicationList;
     }
+
+    public List<TApplication> findPayment() {
+        Query query = em.createNamedQuery("TApplication.findByStatus", TApplication.class);
+        query.setParameter("status", Constant.STATUS_WAIT_PAYMENT);
+        List<TApplication> applicationList = query.getResultList();
+        return applicationList;
+    }
 }
