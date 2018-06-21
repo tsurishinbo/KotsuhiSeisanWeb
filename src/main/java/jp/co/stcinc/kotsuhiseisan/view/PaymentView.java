@@ -1,13 +1,11 @@
 package jp.co.stcinc.kotsuhiseisan.view;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import jp.co.stcinc.kotsuhiseisan.common.Constant;
@@ -18,7 +16,6 @@ import jp.co.stcinc.kotsuhiseisan.facade.TApplicationFacade;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.PrimeFaces;
-import org.primefaces.context.RequestContext;
 
 @Named(value = "paymentView")
 @ViewScoped
@@ -53,27 +50,22 @@ public class PaymentView extends AbstractView {
     }
     
     public void doViewLine(Integer id) {
-//        // option
-//        Map<String,Object> options = new HashMap<>();
+        // option
+        Map<String,Object> options = new HashMap<>();
 //        options.put("modal", true);
-//        options.put("width", 640);
-//        options.put("height", 340);
-//        options.put("contentWidth", "100%");
-//        options.put("contentHeight", "100%");
-//        // parameter
-//        Map<String, List<String>> params = new HashMap<>();
-//        params.put("id", Collections.singletonList(id.toString()));
-//        // dialog
-//        PrimeFaces.current().dialog().openDynamic("dialog.html", options, params);
-
-//        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "What we do in life", "Echoes in eternity.");
-//        PrimeFaces.current().dialog().showMessageDynamic(msg);
-        
-        PrimeFaces.current().dialog().openDynamic("dialog");
+        options.put("width", 600);
+        options.put("height", 400);
+        options.put("contentWidth", "100%");
+        options.put("contentHeight", "100%");
+        // parameter
+        Map<String, List<String>> params = new HashMap<>();
+        params.put(Constant.PARAM_LINE_ID, Collections.singletonList(id.toString()));
+        // dialog
+        // Dialogを使うにはfaces-config.xmlに設定の追加が必要!!
+        PrimeFaces.current().dialog().openDynamic("dialog.xhtml", options, params);
     }
     
     private void setPaymentApplication() {
         paymentApplication = new PaymentApplication(tApplicationFacade.findPayment());
     }
-    
 }

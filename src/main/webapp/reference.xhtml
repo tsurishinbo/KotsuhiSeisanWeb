@@ -80,7 +80,7 @@
                     </p:column>
                 </p:row>
             </p:panelGrid>
-            <h4>■明細</h4>
+            <strong>■明細</strong>
             <ui:repeat var="line" value="#{referenceView.application.lines}">
                 <p:panelGrid>
                     <p:row>
@@ -124,6 +124,9 @@
                             <h:outputText value="⇒" rendered="#{line.isRoundtrip == 0}" />
                             <h:outputText value="⇔" rendered="#{line.isRoundtrip == 1}" />
                             <h:outputText value="#{line.sectionTo}" />
+                            <br />
+                            <p:commandButton type="button" value="料金検索" style="font-size: x-small;" 
+                                             onclick="callYahooTransit('#{line.sectionFrom}', '#{line.sectionTo}')" />
                         </p:column>
                     </p:row>
                     <p:row>

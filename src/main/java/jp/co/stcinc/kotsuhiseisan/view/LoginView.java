@@ -4,6 +4,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import javax.validation.constraints.NotNull;
 import jp.co.stcinc.kotsuhiseisan.entity.MEmployee;
 import jp.co.stcinc.kotsuhiseisan.facade.MEmployeeFacade;
 import lombok.Getter;
@@ -13,8 +14,10 @@ import lombok.Setter;
 @ViewScoped
 public class LoginView extends AbstractView {
 
+    @NotNull(message = "社員番号は必須項目です。")
     @Getter @Setter
     private Integer empNo;
+    @NotNull(message = "パスワードは必須項目です。")
     @Getter @Setter
     private String password;
     @EJB

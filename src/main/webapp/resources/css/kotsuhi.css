@@ -66,6 +66,16 @@
     width: 100px;
 }
 
+.reference_value_center {
+    width: 100px;
+    text-align: center;
+}
+
+.reference_value_right {
+    width: 100px;
+    text-align: right;
+}
+
 .line_header {
     width: 80px;
     font-weight: bold;
@@ -73,6 +83,15 @@
 }
 
 .line_value {
-    width: 400px;
+    width: 500px;
 }
 
+.line_value_center {
+    width: 500px;
+    text-align: center;
+}
+
+.line_value_right {
+    width: 500px;
+    text-align: right;
+}

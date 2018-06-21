@@ -25,4 +25,6 @@ public class Constant {
     public static final String PARAM_BOSSAPPROVE_BOSSID = "param_bossapprove_bossid";
     
     public static final String PARAM_MANAGERAPPROVE_ID = "param_managerapprove_id";
+    
+    public static final String PARAM_LINE_ID = "param_line_id";
 }

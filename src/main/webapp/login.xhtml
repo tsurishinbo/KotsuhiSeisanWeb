@@ -13,13 +13,26 @@
             <p:outputPanel styleClass="message" rendered="#{loginView.message != null}">
                 <h:outputText value="#{loginView.message}" />
             </p:outputPanel>
-            <p:messages />
-            <p:outputLabel for="emp_no" value="社員番号" />
-            <p:inputText id="emp_no" value="#{loginView.empNo}" required="true" />
-            <br />
-            <p:outputLabel for="password" value="パスワード" />
-            <p:password id="password" value="#{loginView.password}" required="true" />
-            <br />
+            <p:panelGrid>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel for="emp_no" value="社員番号" />
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="emp_no" value="#{loginView.empNo}" />
+                        <p:message for="emp_no" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel for="password" value="パスワード" />
+                    </p:column>
+                    <p:column>
+                        <p:password id="password" value="#{loginView.password}" />
+                        <p:message for="password" />
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
             <p />
             <p:commandButton styleClass="cmdbutton" value="ログイン" ajax="false" action="#{loginView.doLogin()}" />
         </h:form>

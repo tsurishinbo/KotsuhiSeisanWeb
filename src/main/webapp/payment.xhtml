@@ -15,31 +15,31 @@
             </p:outputPanel>
             <p:dataTable id="dt" var="app" value="#{paymentView.paymentApplication}" selection="#{paymentView.selectedApplication}">
                 <p:column selectionMode="multiple" />
-                <p:column headerText="申請ID">
+                <p:column headerText="申請ID" sortBy="#{app.id}">
                     <h:outputText value="#{app.id}" />
                 </p:column>
-                <p:column headerText="申請者">
+                <p:column headerText="申請者" sortBy="#{app.applicant.employeeName}">
                     <h:outputText value="#{app.applicant.employeeName}" />
                 </p:column>
-                <p:column headerText="承認者">
+                <p:column headerText="承認者" sortBy="#{app.boss.employeeName}">
                     <h:outputText value="#{app.boss.employeeName}" />
                 </p:column>
-                <p:column headerText="申請日">
+                <p:column headerText="申請日" sortBy="#{app.applyDate}">
                     <h:outputText value="#{app.applyDate}">
                         <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
                     </h:outputText>
                 </p:column>
-                <p:column headerText="承認日">
+                <p:column headerText="承認日" sortBy="#{app.bossApproveDate}">
                     <h:outputText value="#{app.bossApproveDate}">
                         <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
                     </h:outputText>
                 </p:column>
-                <p:column headerText="管理部承認日">
+                <p:column headerText="管理部承認日" sortBy="#{app.managerApproveDate}">
                     <h:outputText value="#{app.managerApproveDate}">
                         <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
                     </h:outputText>
                 </p:column>
-                <p:column headerText="合計料金">
+                <p:column headerText="合計料金" sortBy="#{app.totalFare}">
                     <h:outputText value="#{app.totalFare}">
                         <f:convertNumber pattern="#,##0" />
                     </h:outputText>

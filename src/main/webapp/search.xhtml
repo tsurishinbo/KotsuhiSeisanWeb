@@ -42,34 +42,34 @@
             <ui:fragment rendered="#{searchView.applicationList != null}">
                 <p:separator />
                 <p:dataTable var="app" value="#{searchView.applicationList}">
-                    <p:column headerText="申請ID">
+                    <p:column headerText="申請ID" sortBy="#{app.id}">
                         <h:outputText value="#{app.id}" />
                     </p:column>
-                    <p:column headerText="ステータス">
+                    <p:column headerText="ステータス" sortBy="#{app.status}">
                         <h:outputText value="#{searchView.getStatusName(app.status)}" />
                     </p:column>
-                    <p:column headerText="申請者">
+                    <p:column headerText="申請者" sortBy="#{app.applicant.employeeName}">
                         <h:outputText value="#{app.applicant.employeeName}" />
                     </p:column>
-                    <p:column headerText="承認者">
+                    <p:column headerText="承認者" sortBy="#{app.boss.employeeName}">
                         <h:outputText value="#{app.boss.employeeName}" />
                     </p:column>
-                    <p:column headerText="申請日">
+                    <p:column headerText="申請日" sortBy="#{app.applyDate}">
                         <h:outputText value="#{app.applyDate}">
                             <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="承認日">
+                    <p:column headerText="承認日" sortBy="#{app.bossApproveDate}">
                         <h:outputText value="#{app.bossApproveDate}">
                             <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="支払日">
+                    <p:column headerText="支払日" sortBy="#{app.paymentDate}">
                         <h:outputText value="#{app.paymentDate}">
                             <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="合計料金">
+                    <p:column headerText="合計料金" sortBy="#{app.totalFare}">
                         <h:outputText value="#{app.totalFare}">
                             <f:convertNumber pattern="#,##0" />
                         </h:outputText>

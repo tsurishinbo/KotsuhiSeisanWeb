@@ -2,14 +2,140 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <h:outputStylesheet library="css" name="kotsuhi.css" />
-        <title>dialog</title>
+        <h:outputScript library="js" name="kotsuhi.js" />
+        <title>申請内容(申請ID:#{dialogView.application.id})</title>
     </h:head>
     <h:body>
-        dialog
+        <p:panelGrid>
+            <p:row>
+                <p:column styleClass="reference_header">申請ID</p:column>
+                <p:column styleClass="reference_value">
+                    <h:outputText value="#{dialogView.application.id}" />
+                </p:column>
+                <p:column styleClass="reference_header">ステータス</p:column>
+                <p:column styleClass="reference_value">
+                    <h:outputText value="#{dialogView.getStatusName(dialogView.application.status)}" />
+                </p:column>
+            </p:row>
+            <p:row>
+                <p:column styleClass="reference_header">申請者</p:column>
+                <p:column styleClass="reference_value">
+                    <h:outputText value="#{dialogView.application.applicant.employeeName}" />
+                </p:column>
+                <p:column styleClass="reference_header">申請日</p:column>
+                <p:column styleClass="reference_value">
+                    <h:outputText value="#{dialogView.application.applyDate}">
+                        <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
+                    </h:outputText>
+                </p:column>
+            </p:row>
+            <p:row>
+                <p:column styleClass="reference_header">承認者</p:column>
+                <p:column styleClass="reference_value">
+                    <h:outputText value="#{dialogView.application.boss.employeeName}" />
+                </p:column>
+                <p:column styleClass="reference_header">承認日</p:column>
+                <p:column styleClass="reference_value">
+                    <h:outputText value="#{dialogView.application.bossApproveDate}">
+                        <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
+                    </h:outputText>
+                </p:column>
+            </p:row>
+            <p:row>
+                <p:column styleClass="reference_header">管理部承認者</p:column>
+                <p:column styleClass="reference_value">
+                    <h:outputText value="#{dialogView.application.manager.employeeName}" />
+                </p:column>
+                <p:column styleClass="reference_header">管理部承認日</p:column>
+                <p:column styleClass="reference_value">
+                    <h:outputText value="#{dialogView.application.managerApproveDate}">
+                        <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
+                    </h:outputText>
+                </p:column>
+            </p:row>
+            <p:row>
+                <p:column styleClass="reference_header">合計料金</p:column>
+                <p:column styleClass="reference_value">
+                    <h:outputText value="#{dialogView.application.totalFare}">
+                        <f:convertNumber pattern="#,##0" />
+                    </h:outputText>
+                    &nbsp;円
+                </p:column>
+            </p:row>
+        </p:panelGrid>
+        <strong>■明細</strong>
+        <ui:repeat var="line" value="#{dialogView.application.lines}">
+            <p:panelGrid>
+                <p:row>
+                    <p:column styleClass="line_header">利用日</p:column>
+                    <p:column styleClass="line_value">
+                        <h:outputText value="#{line.usedDate}">
+                            <f:convertDateTime pattern="yyyy/MM/dd" locale="ja" timeZone="JST" />
+                        </h:outputText>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="line_header">作業</p:column>
+                    <p:column styleClass="line_value">
+                        <h:outputText value="#{line.orderId}" />
+                        <h:outputText value=":" rendered="#{line.orderId != null}" />
+                        <h:outputText value="#{line.order.orderName}" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="line_header">出張内容</p:column>
+                    <p:column styleClass="line_value">
+                        <h:outputText value="#{line.purpose}" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="line_header">出張場所</p:column>
+                    <p:column styleClass="line_value">
+                        <h:outputText value="#{line.place}" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="line_header">交通手段</p:column>
+                    <p:column styleClass="line_value">
+                        <h:outputText value="#{line.means.means}" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="line_header">区間</p:column>
+                    <p:column styleClass="line_value">
+                        <h:outputText value="#{line.sectionFrom}" />
+                        <h:outputText value="⇒" rendered="#{line.isRoundtrip == 0}" />
+                        <h:outputText value="⇔" rendered="#{line.isRoundtrip == 1}" />
+                        <h:outputText value="#{line.sectionTo}" />
+                        <br />
+                        <p:commandButton type="button" value="料金検索" style="font-size: x-small;" 
+                                         onclick="callYahooTransit('#{line.sectionFrom}', '#{line.sectionTo}')" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="line_header">料金</p:column>
+                    <p:column styleClass="line_value">
+                        <h:outputText value="#{line.fare}">
+                            <f:convertNumber pattern="#,##0" />
+                        </h:outputText>
+                        &nbsp;円
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column styleClass="line_header">備考</p:column>
+                    <p:column styleClass="line_value">
+                        <h:outputText value="#{dialogView.br(line.memo)}" escape="false" />
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            <p />
+        </ui:repeat>
     </h:body>
 </html>
 

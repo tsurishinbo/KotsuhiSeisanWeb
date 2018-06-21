@@ -95,6 +95,9 @@
                             <h:outputText value="⇒" rendered="#{line.isRoundtrip == 0}" />
                             <h:outputText value="⇔" rendered="#{line.isRoundtrip == 1}" />
                             <h:outputText value="#{line.sectionTo}" />
+                            <br />
+                            <p:commandButton type="button" value="料金検索" style="font-size: x-small;" 
+                                             onclick="callYahooTransit('#{line.sectionFrom}', '#{line.sectionTo}')" />
                         </p:column>
                     </p:row>
                     <p:row>

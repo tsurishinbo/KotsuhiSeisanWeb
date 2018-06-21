@@ -63,17 +63,16 @@
                     </p:column>
                 </p:row>
                 <p:row>
-                    <p:column styleClass="line_header">出発地</p:column>
+                    <p:column styleClass="line_header">区間</p:column>
                     <p:column styleClass="line_value">
-                        <p:inputText id="section_from" style="width:200px;" value="#{makeView.editEntry.sectionFrom}" />
-                        <p:message for="section_from" />
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column styleClass="line_header">到着地</p:column>
-                    <p:column styleClass="line_value">
-                        <p:inputText id="section_to" style="width:200px;" value="#{makeView.editEntry.sectionTo}" />
+                        <p:inputText id="section_from" style="width:150px;" value="#{makeView.editEntry.sectionFrom}" />
+                        ～
+                        <p:inputText id="section_to" style="width:150px;" value="#{makeView.editEntry.sectionTo}" />
+                        <p:commandButton type="button" value="料金検索" 
+                                         onclick="callYahooTransit(document.getElementById('section_from').value, document.getElementById('section_to').value)" 
+                                         style="font-size: x-small; margin-left:5px;" />
                         <p:message for="section_to" />
+                        <p:message for="section_from" />
                     </p:column>
                 </p:row>
                 <p:row>
