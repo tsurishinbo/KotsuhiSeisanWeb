@@ -81,4 +81,19 @@ public class TopView extends AbstractView {
         session.logout();
         return "login.xhtml?faces-redirect=true";
     }
+    
+    public Long getBossApproveCount() {
+        Long count = tApplicationFacade.getBossApproveCount(session.getEmpNo());
+        return count;
+    }
+    
+    public Long getManagerApproveCount() {
+        Long count;
+        if (session.isManager()) {
+            count = tApplicationFacade.getManagerApproveCount();
+        } else {
+            count = 0L;
+        }
+        return count;
+    }
 }

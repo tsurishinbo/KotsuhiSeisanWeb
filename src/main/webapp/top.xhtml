@@ -29,6 +29,17 @@
                     <p:column styleClass="status_value"><h:outputText value="#{topView.cntWaitPayment}" /></p:column>
                 </p:row>
             </p:panelGrid>
+            <p />
+            <ui:fragment rendered="#{topView.bossApproveCount > 0}">
+                <p:commandLink ajax="false" immediate="true" action="#{topView.doBossApprove()}"
+                               value ="#{topView.bossApproveCount} 件の申請があなたの承認待ちです。" />
+                <p />
+            </ui:fragment>
+            <ui:fragment rendered="#{topView.managerApproveCount > 0}">
+                <p:commandLink ajax="false" immediate="true" action="#{topView.doManagerApprove()}"
+                               value ="#{topView.managerApproveCount} 件の申請が管理部の承認待ちです。" />
+                <p />
+            </ui:fragment>
         </ui:define>
     </ui:composition>
 </html>

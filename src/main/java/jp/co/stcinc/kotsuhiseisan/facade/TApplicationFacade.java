@@ -37,8 +37,7 @@ public class TApplicationFacade extends AbstractFacade<TApplication> {
         Query query = em.createNamedQuery("TApplication.getCountByStatus", Long.class);
         query.setParameter("applyId", applyId);
         query.setParameter("status", status);
-        Long count = (Long)query.getSingleResult();
-        return count;
+        return (Long)query.getSingleResult();
     }
     
     public List<TApplication> findByForm(
@@ -105,5 +104,29 @@ public class TApplicationFacade extends AbstractFacade<TApplication> {
         query.setParameter("status", Constant.STATUS_WAIT_PAYMENT);
         List<TApplication> applicationList = query.getResultList();
         return applicationList;
+    }
+    
+    public Long getBossApproveCount(final Integer bossId) {
+        StringBuilder jpql = new StringBuilder();
+        jpql.append("SELECT COUNT(t) ");
+        jpql.append("FROM TApplication t ");
+        jpql.append("WHERE t.status = :status ");
+        jpql.append("AND t.bossApproveId = :bossApproveId ");
+        
+        Query query = em.createQuery(jpql.toString(), TApplication.class);
+        query.setParameter("status", Constant.STATUS_WAIT_BOSS);
+        query.setParameter("bossApproveId", bossId);
+        return (Long)query.getSingleResult();
+    }
+    
+    public Long getManagerApproveCount() {
+        StringBuilder jpql = new StringBuilder();
+        jpql.append("SELECT COUNT(t) ");
+        jpql.append("FROM TApplication t ");
+        jpql.append("WHERE t.status = :status ");
+        
+        Query query = em.createQuery(jpql.toString(), TApplication.class);
+        query.setParameter("status", Constant.STATUS_WAIT_MANAGER);
+        return (Long)query.getSingleResult();
     }
 }
