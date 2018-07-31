@@ -11,6 +11,9 @@
             <f:metadata>
                 <f:viewAction action="#{referenceView.doLoginCheck()}" />
             </f:metadata>
+            <p:outputPanel styleClass="message">
+                <h:outputText value="#{referenceView.message}" rendered="#{referenceView.message != null}" />
+            </p:outputPanel>
             <p:panelGrid>
                 <p:row>
                     <p:column styleClass="reference_header">申請ID</p:column>
@@ -194,7 +197,8 @@
                              action="#{referenceView.doCancelManagerApprove()}" rendered="#{referenceView.enabledCancelManagerApprove}"
                              onclick="return confirm('管理部承認を取消します。')" />
             <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="精算書出力" ajax="false" 
-                             action="#{referenceView.doReport()}" rendered="#{referenceView.enabledReport}" />
+                             action="#{referenceView.doReport()}" rendered="#{referenceView.enabledReport}"
+                             onclick="return confirm('精算書を出力します。')" />
             <p:commandButton styleClass="cmdbutton" style="margin-right:5px;" value="戻る" ajax="false" 
                              action="#{referenceView.doReturn()}" />
             <p />

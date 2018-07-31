@@ -9,6 +9,7 @@ import javax.faces.context.Flash;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import jp.co.stcinc.kotsuhiseisan.common.Constant;
+import jp.co.stcinc.kotsuhiseisan.common.Report;
 import jp.co.stcinc.kotsuhiseisan.entity.TApplication;
 import jp.co.stcinc.kotsuhiseisan.entity.TLine;
 import jp.co.stcinc.kotsuhiseisan.facade.MEmployeeFacade;
@@ -110,6 +111,8 @@ public class ReferenceView extends AbstractView {
     }
     
     public String doReport() {
+        Report.make(application);
+        message = "精算書を出力しました。";
         return null;
     }
     

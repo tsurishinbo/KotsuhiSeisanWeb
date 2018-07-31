@@ -56,9 +56,9 @@
                 <p:row>
                     <p:column styleClass="line_header">交通手段</p:column>
                     <p:column styleClass="line_value">
-                        <p:selectOneRadio id="means" value="#{makeView.editEntry.meansId}">
+                        <p:selectOneMenu id="means" value="#{makeView.editEntry.meansId}">
                             <f:selectItems value="#{makeView.meansList}" />
-                        </p:selectOneRadio>
+                        </p:selectOneMenu>
                         <p:message for="means" />
                     </p:column>
                 </p:row>

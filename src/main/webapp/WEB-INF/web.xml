@@ -14,6 +14,19 @@
         <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
         <param-value>true</param-value>
     </context-param>
+
+
+        
+    <context-param>
+        <param-name>ReportTemplate</param-name>
+        <param-value>D:/work/template.xlsx</param-value>
+    </context-param>
+    <context-param>
+        <param-name>ReportPath</param-name>
+        <param-value>D:/work</param-value>
+    </context-param>
+    
+    
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -24,9 +37,7 @@
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
     <session-config>
-        <session-timeout>
-            30
-        </session-timeout>
+        <session-timeout>30</session-timeout>
     </session-config>
     <welcome-file-list>
         <welcome-file>faces/login.xhtml</welcome-file>

@@ -10,6 +10,7 @@ import javax.faces.view.ViewScoped;
 import javax.validation.constraints.NotNull;
 import jp.co.stcinc.kotsuhiseisan.common.Constant;
 import jp.co.stcinc.kotsuhiseisan.common.DateUtils;
+import jp.co.stcinc.kotsuhiseisan.common.Report;
 import jp.co.stcinc.kotsuhiseisan.entity.TApplication;
 import jp.co.stcinc.kotsuhiseisan.entity.TReject;
 import jp.co.stcinc.kotsuhiseisan.facade.TApplicationFacade;
@@ -46,6 +47,7 @@ public class ManagerApproveView extends AbstractView {
         application.setManagerApproveId(session.getEmpNo());
         application.setManagerApproveDate(DateUtils.getToday());
         tApplicationFacade.edit(application);
+        Report.make(application);
         return "manager_approve_list.xhtml?faces-redirect=true";
     }
     

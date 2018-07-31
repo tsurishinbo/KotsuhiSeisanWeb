@@ -29,7 +29,9 @@ import lombok.Setter;
 @ViewScoped
 public class MakeView extends AbstractView {
 
-    int mode;
+    private static final int MAX_LINE = 100;
+    
+    private int mode;
     private Integer applicationId;
     
     @Getter @Setter
@@ -108,6 +110,11 @@ public class MakeView extends AbstractView {
     }
     
     public String doSave() {
+        if (getLineCount() > Constant.MAX_LINE) {
+            message = "１度に申請できる明細は" + String.valueOf(MAX_LINE) + "件までです。";
+            return null;
+        }
+        // 保存
         if (mode == Constant.MAKE_MODE_NEW) {
             TApplication app = new TApplication();
             app.setStatus(Constant.STATUS_SAVE);
@@ -127,6 +134,11 @@ public class MakeView extends AbstractView {
     }
     
     public String doApply() {
+        if (getLineCount() > Constant.MAX_LINE) {
+            message = "１度に申請できる明細は" + String.valueOf(MAX_LINE) + "件までです。";
+            return null;
+        }
+        // 申請
         if (mode == Constant.MAKE_MODE_NEW) {
             TApplication app = new TApplication();
             app.setStatus(Constant.STATUS_WAIT_BOSS);
@@ -175,6 +187,26 @@ public class MakeView extends AbstractView {
         }
     }
     
+    public String getStyle(LineDto entry) {
+        if (updatingEntry == entry) {
+            return "background-color: #ffe4e1;";
+        } else {
+            return null;
+        }
+    }
+    
+    public boolean isDisabledButton() {
+        return (updatingEntry != null);
+    }
+
+    public boolean isDisabledSaveButton() {
+        if (updatingEntry != null) {
+            return true;
+        } else {
+            return (getLineCount() == 0);
+        }
+    }
+
     private void initNew() {
         mode = Constant.MAKE_MODE_NEW;
         applicationId = null;
@@ -248,14 +280,14 @@ public class MakeView extends AbstractView {
         return totalFare;
     }
     
-    private boolean checkNoLine() {
-        int lineCnt = 0;
-        for (LineDto lineDto : entryList) {
-            if (!lineDto.isDeleted()) {
-                lineCnt += 1;
+    private int getLineCount() {
+        int count = 0;
+        for (LineDto entry : entryList) {
+            if (!entry.isDeleted()) {
+                count += 1;
             }
         }
-        return lineCnt > 0;
+        return count;
     }
     
     private void copyEntry(LineDto srcEntry, LineDto dstEntry) {
@@ -324,31 +356,4 @@ public class MakeView extends AbstractView {
         line.setFare(entry.isRoundtrip() ? entry.getOneWayFee() * 2 : entry.getOneWayFee());
         line.setMemo(entry.getMemo());
     }
-    
-    public String getStyle(LineDto entry) {
-        if (updatingEntry == entry) {
-            return "background-color: #ffe4e1;";
-        } else {
-            return null;
-        }
-    }
-    
-    public boolean isDisabledButton() {
-        return (updatingEntry != null);
-    }
-
-    public boolean isDisabledSaveButton() {
-        if (updatingEntry != null) {
-            return true;
-        } else {
-            int lineCount = 0;
-            for (LineDto entry : entryList) {
-                if (!entry.isDeleted()) {
-                    lineCount += 1;
-                }
-            }
-            return (lineCount == 0);
-        }
-    }
-    
 }

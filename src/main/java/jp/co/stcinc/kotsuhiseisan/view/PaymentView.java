@@ -11,6 +11,7 @@ import javax.faces.view.ViewScoped;
 import jp.co.stcinc.kotsuhiseisan.common.Constant;
 import jp.co.stcinc.kotsuhiseisan.common.DateUtils;
 import jp.co.stcinc.kotsuhiseisan.common.PaymentApplication;
+import jp.co.stcinc.kotsuhiseisan.common.Report;
 import jp.co.stcinc.kotsuhiseisan.entity.TApplication;
 import jp.co.stcinc.kotsuhiseisan.facade.TApplicationFacade;
 import lombok.Getter;
@@ -27,6 +28,8 @@ public class PaymentView extends AbstractView {
     private List<TApplication> selectedApplication;
     @EJB
     private TApplicationFacade tApplicationFacade;
+    @EJB
+    private Report report;
     
     @PostConstruct
     @Override
