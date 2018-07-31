@@ -77,7 +77,7 @@ public class Report {
             // フッタ情報作成
             makeFooter(sheet, application.getId().toString());
             // ブック保存
-            String filePath = path + "/" + application.getId() + ".xlsx";
+            String filePath = path + "/交通費精算書_" + application.getId() + ".xlsx";
             write(wb, filePath);
         } catch (IOException | EncryptedDocumentException | InvalidFormatException e) {
             

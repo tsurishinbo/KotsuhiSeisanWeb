@@ -28,8 +28,6 @@ public class PaymentView extends AbstractView {
     private List<TApplication> selectedApplication;
     @EJB
     private TApplicationFacade tApplicationFacade;
-    @EJB
-    private Report report;
     
     @PostConstruct
     @Override
