@@ -1,12 +1,16 @@
 package jp.co.stcinc.kotsuhiseisan.common;
 
+/**
+ * 定数定義クラス
+ */
 public class Constant {
 
     /**
      * アプリケーション設定キー項目名
      */
-    public static final String CONFIG_REPORT_TEMPLATE = "ReportTemplate";
+    public static final String CONFIG_REPORT_URI = "ReportUri";
     public static final String CONFIG_REPORT_PATH = "ReportPath";
+    public static final String CONFIG_REPORT_TEMPLATE = "ReportTemplate";
 
     /**
      * ステータス
@@ -43,4 +47,5 @@ public class Constant {
      * 最大明細数
      */
     public static final int MAX_LINE = 100;
+   
 }

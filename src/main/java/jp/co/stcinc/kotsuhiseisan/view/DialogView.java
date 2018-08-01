@@ -11,6 +11,9 @@ import jp.co.stcinc.kotsuhiseisan.facade.TApplicationFacade;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 交通費申請照会ダイアログのバッキングビーン
+ */
 @Named(value = "dialogView")
 @RequestScoped
 public class DialogView extends AbstractView {
@@ -20,6 +23,9 @@ public class DialogView extends AbstractView {
     @EJB
     private TApplicationFacade tApplicationFacade;
     
+    /**
+     * 初期処理
+     */
     @PostConstruct
     @Override
     public void init() {

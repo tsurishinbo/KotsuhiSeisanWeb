@@ -13,6 +13,9 @@ import jp.co.stcinc.kotsuhiseisan.facade.TApplicationFacade;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 管理部承認一覧画面のバッキングビーン
+ */
 @Named(value = "managerApproveListView")
 @ViewScoped
 public class ManagerApproveListView extends AbstractView {
@@ -22,18 +25,29 @@ public class ManagerApproveListView extends AbstractView {
     @EJB
     private TApplicationFacade tApplicationFacade;
     
+    /**
+     * 処理処理
+     */
     @PostConstruct
     @Override
     public void init() {
         setApplicationList();
     }
 
+    /**
+     * 詳細
+     * @param id 申請ID
+     * @return 遷移先の画面
+     */
     public String doReference(Integer id) {
         Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
         flash.put(Constant.PARAM_MANAGERAPPROVE_ID, id);
         return "manager_approve.xhtml?faces-redirect";
     }
     
+    /**
+     * 管理部承認待ち一覧の作成
+     */
     private void setApplicationList() {
         applicationList = tApplicationFacade.findManagerApprove();
     }

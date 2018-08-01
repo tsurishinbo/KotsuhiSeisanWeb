@@ -16,6 +16,9 @@ import jp.co.stcinc.kotsuhiseisan.facade.TApplicationFacade;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 上司承認画面のバッキングビーン
+ */
 @Named(value = "bossApproveView")
 @ViewScoped
 public class BossApproveView extends AbstractView {
@@ -31,6 +34,9 @@ public class BossApproveView extends AbstractView {
     @EJB
     private TApplicationFacade tApplicationFacade;
     
+    /**
+     * 初期処理
+     */
     @PostConstruct
     @Override
     public void init() {
@@ -43,6 +49,10 @@ public class BossApproveView extends AbstractView {
         }
     }
     
+    /**
+     * 承認
+     * @return 遷移先の画面
+     */
     public String doApprove() {
         application.setStatus(Constant.STATUS_WAIT_MANAGER);
         application.setBossApproveDate(DateUtils.getToday());
@@ -51,6 +61,10 @@ public class BossApproveView extends AbstractView {
         return "boss_approve_list.xhtml?faces-rediect=true";
     }
     
+    /**
+     * 差戻
+     * @return 遷移先の画面
+     */
     public String doReject() {
         List<TReject> rejectList = application.getReject();
         TReject reject = new TReject();
@@ -68,11 +82,18 @@ public class BossApproveView extends AbstractView {
         return "boss_approve_list.xhtml?faces-rediect=true";
     }
     
+    /**
+     * 戻る
+     * @return 遷移先の画面
+     */
     public String doReturn() {
         setFlash();
         return "boss_approve_list.xhtml?faces-rediect=true";
     }
     
+    /**
+     * 画面間パラメータ(Flash)の設定
+     */
     private void setFlash() {
         Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
         flash.put(Constant.PARAM_BOSSAPPROVE_BOSSID, bossId);

@@ -8,6 +8,9 @@ import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 交通費申請明細入力情報クラス
+ */
 public class LineDto {
 
     @Getter @Setter

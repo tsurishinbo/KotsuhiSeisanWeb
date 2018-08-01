@@ -6,6 +6,9 @@ import jp.co.stcinc.kotsuhiseisan.common.Session;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Viewバッキングビーンの基底クラス
+ */
 public abstract class AbstractView implements Serializable {
  
     @Inject
@@ -13,9 +16,16 @@ public abstract class AbstractView implements Serializable {
     protected Session session;
     @Getter @Setter
     protected String message;
-    
+
+    /**
+     * 初期処理
+     */
     public abstract void init();
     
+    /**
+     * 未ログインの場合にログイン画面に強制遷移する
+     * @return 遷移先画面
+     */
     public String doLoginCheck() {
         if (!session.isAuth()) {
             return "login.xhtml?faces-redirect=true";
@@ -23,6 +33,11 @@ public abstract class AbstractView implements Serializable {
         return null;
     }
     
+    /**
+     * ステータス区分からステータス名を取得する
+     * @param status ステータス区分
+     * @return ステータス名
+     */
     public String getStatusName(final int status) {
         switch (status) {
             case 0:
@@ -40,7 +55,12 @@ public abstract class AbstractView implements Serializable {
         }
     }
     
+    /**
+     * 改行コードをbrタグに変換する
+     * @param str 変換前文字列
+     * @return 返還後文字列
+     */
     public String br(String str) {
-        return str.replace("\n","<br/>");
+        return str.replace("\n", "<br/>");
     }
 }

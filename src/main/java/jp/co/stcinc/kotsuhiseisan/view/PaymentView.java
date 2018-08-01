@@ -11,13 +11,15 @@ import javax.faces.view.ViewScoped;
 import jp.co.stcinc.kotsuhiseisan.common.Constant;
 import jp.co.stcinc.kotsuhiseisan.common.DateUtils;
 import jp.co.stcinc.kotsuhiseisan.common.PaymentApplication;
-import jp.co.stcinc.kotsuhiseisan.common.Report;
 import jp.co.stcinc.kotsuhiseisan.entity.TApplication;
 import jp.co.stcinc.kotsuhiseisan.facade.TApplicationFacade;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.PrimeFaces;
 
+/**
+ * 支払確定画面のバッキングビーン
+ */
 @Named(value = "paymentView")
 @ViewScoped
 public class PaymentView extends AbstractView {
@@ -29,12 +31,18 @@ public class PaymentView extends AbstractView {
     @EJB
     private TApplicationFacade tApplicationFacade;
     
+    /**
+     * 初期処理
+     */
     @PostConstruct
     @Override
     public void init() {
         setPaymentApplication();
     }
 
+    /**
+     * 確定
+     */
     public void doPayment() {
         if (selectedApplication.isEmpty()) {
             message = "入金を確定する申請を選択してください。";
@@ -50,6 +58,10 @@ public class PaymentView extends AbstractView {
         }
     }
     
+    /**
+     * 明細ダイアログを開く
+     * @param id 申請ID
+     */
     public void doViewLine(Integer id) {
         // option
         Map<String,Object> options = new HashMap<>();
@@ -66,6 +78,9 @@ public class PaymentView extends AbstractView {
         PrimeFaces.current().dialog().openDynamic("dialog.xhtml", options, params);
     }
     
+    /**
+     * 支払確定一覧の作成
+     */
     private void setPaymentApplication() {
         paymentApplication = new PaymentApplication(tApplicationFacade.findPayment());
     }

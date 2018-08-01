@@ -5,7 +5,6 @@ import javax.faces.context.FacesContext;
 
 /**
  * アプリケーション設定情報クラス
- * @author ykageyama
  */
 public class ApplicationConfig {
 

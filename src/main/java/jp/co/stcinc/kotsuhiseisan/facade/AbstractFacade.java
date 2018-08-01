@@ -3,6 +3,10 @@ package jp.co.stcinc.kotsuhiseisan.facade;
 import java.util.List;
 import javax.persistence.EntityManager;
 
+/**
+ * Facade基底クラス
+ * @param <T> 
+ */
 public abstract class AbstractFacade<T> {
 
     private Class<T> entityClass;

@@ -8,6 +8,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import jp.co.stcinc.kotsuhiseisan.entity.MEmployee;
 
+/**
+ * 社員Facadeクラス
+ */
 @Stateless
 public class MEmployeeFacade extends AbstractFacade<MEmployee> {
 

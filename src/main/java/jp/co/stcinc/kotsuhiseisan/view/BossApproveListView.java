@@ -18,6 +18,9 @@ import jp.co.stcinc.kotsuhiseisan.facade.TApplicationFacade;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 上司承認一覧画面のバッキングビーン
+ */
 @Named(value = "bossApproveListView")
 @ViewScoped
 public class BossApproveListView extends AbstractView {
@@ -32,7 +35,10 @@ public class BossApproveListView extends AbstractView {
     private MEmployeeFacade mEmployeeFacade;
     @EJB
     private TApplicationFacade tApplicationFacade;
-    
+ 
+    /**
+     * 初期処理
+     */
     @PostConstruct
     @Override
     public void init() {
@@ -47,11 +53,20 @@ public class BossApproveListView extends AbstractView {
         setApplicationList();
     }
 
+    /**
+     * 上司承認待ちデータの検索
+     * @param e 
+     */
     public void doSearch(ValueChangeEvent e) {
         bossId = (Integer)e.getNewValue();
         setApplicationList();
     }
     
+    /**
+     * 詳細
+     * @param id 申請ID
+     * @return 遷移先の画面
+     */
     public String doReference(Integer id) {
         Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
         flash.put(Constant.PARAM_BOSSAPPROVE_ID, id);
@@ -59,6 +74,9 @@ public class BossApproveListView extends AbstractView {
         return "boss_approve.xhtml?faces-redirect=true";
     }
     
+    /**
+     * 承認者ドロップダウンリスト内容の設定
+     */
     private void setApproverList() {
         approverList = new ArrayList<>();
         List<MEmployee> employeeList = mEmployeeFacade.findBukaManager(session.getEmpNo());
@@ -70,6 +88,9 @@ public class BossApproveListView extends AbstractView {
         }
     }
 
+    /**
+     * 上司承認待ち一覧の作成
+     */
     private void setApplicationList() {
         applicationList = tApplicationFacade.findBossApprove(bossId);
     }

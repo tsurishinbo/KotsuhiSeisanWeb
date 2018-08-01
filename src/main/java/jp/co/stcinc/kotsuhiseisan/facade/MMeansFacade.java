@@ -7,6 +7,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import jp.co.stcinc.kotsuhiseisan.entity.MMeans;
 
+/**
+ * 交通手段Facadeクラス
+ */
 @Stateless
 public class MMeansFacade extends AbstractFacade<MMeans> {
 

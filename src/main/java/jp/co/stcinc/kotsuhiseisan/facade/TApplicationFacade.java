@@ -11,6 +11,9 @@ import javax.persistence.Query;
 import jp.co.stcinc.kotsuhiseisan.common.Constant;
 import jp.co.stcinc.kotsuhiseisan.entity.TApplication;
 
+/**
+ * 交通費申請Facadeクラス
+ */
 @Stateless
 public class TApplicationFacade extends AbstractFacade<TApplication> {
 

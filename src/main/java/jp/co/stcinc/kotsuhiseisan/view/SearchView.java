@@ -18,6 +18,9 @@ import jp.co.stcinc.kotsuhiseisan.facade.TApplicationFacade;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 交通費申請検索画面のバッキングビーン
+ */
 @Named(value = "searchView")
 @ViewScoped
 public class SearchView extends AbstractView {
@@ -39,6 +42,9 @@ public class SearchView extends AbstractView {
     @EJB
     private TApplicationFacade tApplicationFacade;
 
+    /**
+     * 初期処理
+     */
     @PostConstruct
     @Override
     public void init() {
@@ -60,10 +66,18 @@ public class SearchView extends AbstractView {
         setApplicantList();
     }
     
+    /**
+     * 検索
+     */
     public void doSearch() {
         setApplicationList();
     }
     
+    /**
+     * 詳細
+     * @param id 申請ID
+     * @return 遷移先の画面
+     */
     public String doReference(Integer id) {
         Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
         flash.put(Constant.PARAM_SEARCH_ID, id);
@@ -74,6 +88,9 @@ public class SearchView extends AbstractView {
         return "reference.xhtml?faces-redirect=true";
     }
     
+    /**
+     * 申請者ドロップダウンリスト内容の設定
+     */
     private void setApplicantList() {
         applyList = new ArrayList<>();
         applyList.add(new SelectItem(null, ""));
@@ -98,6 +115,9 @@ public class SearchView extends AbstractView {
         }
     }
     
+    /**
+     * 検索結果一覧の作成
+     */
     private void setApplicationList() {
         applicationList = tApplicationFacade.findByForm(
                 applyDateFrom, 

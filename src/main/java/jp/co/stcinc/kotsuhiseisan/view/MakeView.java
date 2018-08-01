@@ -25,6 +25,9 @@ import jp.co.stcinc.kotsuhiseisan.facade.TLineFacade;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 交通費申請作成画面のバッキングビーン
+ */
 @Named(value = "makeView")
 @ViewScoped
 public class MakeView extends AbstractView {
@@ -59,6 +62,9 @@ public class MakeView extends AbstractView {
     @EJB
     private MEmployeeFacade mEmployeeFacade;
     
+    /**
+     * 初期処理
+     */
     @PostConstruct
     @Override
     public void init() {
@@ -78,37 +84,62 @@ public class MakeView extends AbstractView {
         }
     }
 
+    /**
+     * 明細追加
+     */
     public void doAdd() {
         entryList.add(editEntry);
         editEntry = new LineDto();
     }
 
+    /**
+     * 明細更新
+     */
     public void doUpdate() {
         copyEntry(editEntry, updatingEntry);
         updatingEntry = null;
         editEntry = new LineDto();
     }
 
+    /**
+     * 明細更新キャンセル
+     */
     public void doUpdateCancel() {
         updatingEntry = null;
         editEntry = new LineDto();
     }
     
+    /**
+     * 編集
+     * @param entry 対象の明細
+     */
     public void doEdit(LineDto entry) {
         updatingEntry = entry;
         copyEntry(entry, editEntry);
     }
     
+    /**
+     * 削除
+     * @param entry 対象の明細
+     */
     public void doDelete(LineDto entry) {
         entry.setDeleted(true);
     }
 
+    /**
+     * コピー
+     * @param entry 対象の明細
+     */
     public void doCopy(LineDto entry) {
         LineDto newEntry = new LineDto();
         copyEntry(entry, newEntry);
         entryList.add(newEntry);
     }
     
+    /**
+     * 保存
+     * @return 遷移先の画面
+     */
     public String doSave() {
         if (getLineCount() > Constant.MAX_LINE) {
             message = "１度に申請できる明細は" + String.valueOf(MAX_LINE) + "件までです。";
@@ -133,6 +164,10 @@ public class MakeView extends AbstractView {
         return "top.xhtml?redirect=true";
     }
     
+    /**
+     * 申請
+     * @return 遷移先の画面
+     */
     public String doApply() {
         if (getLineCount() > Constant.MAX_LINE) {
             message = "１度に申請できる明細は" + String.valueOf(MAX_LINE) + "件までです。";
@@ -160,7 +195,12 @@ public class MakeView extends AbstractView {
         return "top.xhtml?redirect=true";
     }
     
+    /**
+     * 申請料金を取得する
+     * @return 申請料金
+     */
     public String getFare() {
+        // 往復がチェックされている場合は片道料金の２倍、チェックされていない場合は片道料金
         if (editEntry.getOneWayFee() != null) {
             Integer fare = (editEntry.isRoundtrip() ? editEntry.getOneWayFee() * 2 : editEntry.getOneWayFee());
             return String.format("%,d", fare) + " 円";
@@ -169,6 +209,11 @@ public class MakeView extends AbstractView {
         }
     }
     
+    /**
+     * 作業名を取得する
+     * @param id 作業コード
+     * @return 作業名
+     */
     public String getOrderName(String id) {
         MOrder order = mOrderFacade.find(id);
         if (order != null) {
@@ -178,6 +223,11 @@ public class MakeView extends AbstractView {
         }
     }
     
+    /**
+     * 交通手段名を取得する
+     * @param id 交通手段コード
+     * @return 交通手段名
+     */
     public String getMeansName(Integer id) {
         MMeans means = mMeansFacade.find(id);
         if (means != null) {
@@ -187,7 +237,13 @@ public class MakeView extends AbstractView {
         }
     }
     
+    /**
+     * スタイル（行の背景色）を取得する
+     * @param entry 対象の明細
+     * @return 
+     */
     public String getStyle(LineDto entry) {
+        // 対象の明細が編集中の場合は背景色を返却する
         if (updatingEntry == entry) {
             return "background-color: #ffe4e1;";
         } else {
@@ -195,10 +251,19 @@ public class MakeView extends AbstractView {
         }
     }
     
+    /**
+     * 各ボタンが無効であるかを取得する
+     * （明細追加・明細更新・明細更新キャンセル・編集・削除・コピー）
+     * @return true:無効 false:有効
+     */
     public boolean isDisabledButton() {
         return (updatingEntry != null);
     }
 
+    /**
+     * 保存・申請ボタンが無効であるかを取得する
+     * @return true:無効 false:有効
+     */
     public boolean isDisabledSaveButton() {
         if (updatingEntry != null) {
             return true;
@@ -207,12 +272,19 @@ public class MakeView extends AbstractView {
         }
     }
 
+    /**
+     * 新規モードで画面を初期化する
+     */
     private void initNew() {
         mode = Constant.MAKE_MODE_NEW;
         applicationId = null;
         bossId = session.getBossId();
     }
 
+    /**
+     * 編集モードで画面を初期化する
+     * @param id 申請ID
+     */
     private void initEdit(Integer id) {
         mode = Constant.MAKE_MODE_MODIFY;
         applicationId = id;
@@ -236,6 +308,9 @@ public class MakeView extends AbstractView {
         }
     }
     
+    /**
+     * 承認者ドロップダウンリスト内容の設定
+     */
     private void setBossList() {
         bossList = new ArrayList<>();
         List<MEmployee> bossListDb = mEmployeeFacade.findBoss(session.getEmpNo());
@@ -247,6 +322,9 @@ public class MakeView extends AbstractView {
         }
     }
 
+    /**
+     * 作業ドロップダウンリスト内容の設定
+     */
     private void setOrderList() {
         orderList = new ArrayList<>();
         orderList.add(new SelectItem(null, ""));
@@ -259,6 +337,9 @@ public class MakeView extends AbstractView {
         }
     }
     
+    /**
+     * 交通手段ドロップダウンリスト内容の設定
+     */
     private void setMeansList() {
         meansList = new ArrayList<>();
         List<MMeans> meansListDb = mMeansFacade.findAll();
@@ -270,6 +351,10 @@ public class MakeView extends AbstractView {
         }
     }
     
+    /**
+     * 申請料金の合計を取得する
+     * @return 申請料金の合計
+     */
     private int getTotalFare() {
         int totalFare = 0;
         for (LineDto lineDto : entryList) {
@@ -280,6 +365,10 @@ public class MakeView extends AbstractView {
         return totalFare;
     }
     
+    /**
+     * 申請明細の件数を取得する
+     * @return 申請明細の件数
+     */
     private int getLineCount() {
         int count = 0;
         for (LineDto entry : entryList) {
@@ -290,6 +379,11 @@ public class MakeView extends AbstractView {
         return count;
     }
     
+    /**
+     * 申請明細をコピーする
+     * @param srcEntry コピー元の申請明細
+     * @param dstEntry コピー先の申請明細
+     */
     private void copyEntry(LineDto srcEntry, LineDto dstEntry) {
         dstEntry.setUsedDate(srcEntry.getUsedDate());
         dstEntry.setOrderId(srcEntry.getOrderId());
@@ -304,6 +398,10 @@ public class MakeView extends AbstractView {
         dstEntry.setDeleted(srcEntry.isDeleted());
     }
     
+    /**
+     * 申請明細のリストを作成する
+     * @return 申請明細のリスト
+     */
     private List<TLine> makeAddLines() {
         int sortNo = 1;
         List<TLine> addLines = new ArrayList<>();
@@ -318,11 +416,14 @@ public class MakeView extends AbstractView {
         return addLines;
     }
     
+    /**
+     * 申請明細を更新する
+     */
     private void updateLines() {
         int sortNo = 1;
         for (LineDto entry : entryList) {
             if (entry.getId() == null && !entry.isDeleted()) {
-                // INSERT
+                // 追加
                 TLine line = new TLine();
                 setEntryToLine(entry, line);
                 line.setApplicationId(applicationId);
@@ -330,20 +431,25 @@ public class MakeView extends AbstractView {
                 tLineFacade.create(line);
             }
             if (entry.getId() != null && !entry.isDeleted()) {
-                // UPDATE
+                // 更新
                 TLine line = tLineFacade.find(entry.getId());
                 setEntryToLine(entry, line);
                 line.setSortNo(sortNo++);
                 tLineFacade.edit(line);
             }
             if (entry.getId() != null && entry.isDeleted()) {
-                // DELETE
+                // 削除
                 TLine line = tLineFacade.find(entry.getId());
                 tLineFacade.remove(line);
             }
         }
     }
     
+    /**
+     * DBから取得した申請明細を入力用のエンティティに設定する
+     * @param entry 入力用のエンティティ
+     * @param line DBから申請した申請明細
+     */
     private void setEntryToLine(LineDto entry, TLine line) {
         line.setUsedDate(entry.getUsedDate());
         line.setOrderId(entry.getOrderId());

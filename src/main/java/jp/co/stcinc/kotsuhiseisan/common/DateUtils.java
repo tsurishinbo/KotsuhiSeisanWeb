@@ -4,8 +4,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+/**
+ * 日付ユーティリティクラス
+ */
 public class DateUtils {
 
+    /**
+     * 今日の日付を取得する
+     * @return 今日の日付
+     */
     public static Date getToday() {
         TimeZone tz = TimeZone.getTimeZone("Asia/Tokyo");
         Calendar c = Calendar.getInstance(tz);

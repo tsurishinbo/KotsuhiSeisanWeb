@@ -7,6 +7,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import jp.co.stcinc.kotsuhiseisan.entity.TLine;
 
+/**
+ * 交通費申請明細Facadeクラス
+ */
 @Stateless
 public class TLineFacade extends AbstractFacade<TLine> {
 

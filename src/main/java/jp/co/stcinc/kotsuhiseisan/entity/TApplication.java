@@ -22,6 +22,9 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * 交通費申請エンティティ
+ */
 @Entity
 @Table(name = "t_application")
 @XmlRootElement

@@ -17,6 +17,9 @@ import jp.co.stcinc.kotsuhiseisan.facade.TApplicationFacade;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 管理部承認画面のバッキングビーン
+ */
 @Named(value = "managerApproveView")
 @ViewScoped
 public class ManagerApproveView extends AbstractView {
@@ -31,6 +34,9 @@ public class ManagerApproveView extends AbstractView {
     @EJB
     private TApplicationFacade tApplicationFacade;
     
+    /**
+     * 初期処理
+     */
     @PostConstruct
     @Override
     public void init() {
@@ -42,6 +48,10 @@ public class ManagerApproveView extends AbstractView {
         }
     }
     
+    /**
+     * 承認
+     * @return 遷移先の画面
+     */
     public String doApprove() {
         application.setStatus(Constant.STATUS_WAIT_PAYMENT);
         application.setManagerApproveId(session.getEmpNo());
@@ -51,6 +61,10 @@ public class ManagerApproveView extends AbstractView {
         return "manager_approve_list.xhtml?faces-redirect=true";
     }
     
+    /**
+     * 差戻
+     * @return 遷移先の画面
+     */
     public String doReject() {
         List<TReject> rejectList = application.getReject();
         TReject reject = new TReject();
@@ -68,6 +82,10 @@ public class ManagerApproveView extends AbstractView {
         return "manager_approve_list.xhtml?faces-redirect=true";
     }
     
+    /**
+     * 戻る
+     * @return 遷移先の画面
+     */
     public String doReturn() {
         return "manager_approve_list.xhtml?faces-redirect=true";
     }

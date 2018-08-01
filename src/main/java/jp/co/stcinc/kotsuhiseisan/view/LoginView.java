@@ -10,6 +10,9 @@ import jp.co.stcinc.kotsuhiseisan.facade.MEmployeeFacade;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * ログイン画面のバッキングビーン
+ */
 @Named(value = "loginView")
 @ViewScoped
 public class LoginView extends AbstractView {
@@ -23,12 +26,19 @@ public class LoginView extends AbstractView {
     @EJB
     private MEmployeeFacade mEmployeeFacade;
 
+    /**
+     * 初期処理
+     */
     @PostConstruct
     @Override
     public void init() {
         session.logout();
     }
     
+    /**
+     * ログイン
+     * @return 遷移先の画面
+     */
     public String doLogin() {
         MEmployee mEmployee = mEmployeeFacade.find(empNo, password);
         if (mEmployee != null) {

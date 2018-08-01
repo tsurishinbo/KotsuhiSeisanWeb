@@ -57,14 +57,14 @@ public class Report {
     public Report() { }
     
     /**
-     * 精算書を作成する
+     * 交通費精算書を作成する
      * @param application 申請情報
      */
     public static void make(TApplication application) {
-        // テンプレートファイル
-        String template = ApplicationConfig.getAppConfig(Constant.CONFIG_REPORT_TEMPLATE);
-        // 精算書の出力先パス
+        // 交通費精算書の出力先パス
         String path = ApplicationConfig.getAppConfig(Constant.CONFIG_REPORT_PATH);
+        // テンプレートファイルパス
+        String template = ApplicationConfig.getAppConfig(Constant.CONFIG_REPORT_TEMPLATE);
        
         try {
             InputStream is = new FileInputStream(template);

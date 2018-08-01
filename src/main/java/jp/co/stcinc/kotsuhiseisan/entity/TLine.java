@@ -19,6 +19,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * 交通費申請明細エンティティ
+ */
 @Entity
 @Table(name = "t_line")
 @XmlRootElement

@@ -13,6 +13,13 @@
             <p:outputPanel styleClass="message">
                 <h:outputText value="#{reportView.message}" rendered="#{reportView.message != null}" />
             </p:outputPanel>
+            <ui:repeat var="report" value="#{reportView.reports}">
+                <p><a href="#{report.url}">#{report.name}</a></p>
+            </ui:repeat>
+            
+            
+            
+            
         </ui:define>
     </ui:composition>
 </html>

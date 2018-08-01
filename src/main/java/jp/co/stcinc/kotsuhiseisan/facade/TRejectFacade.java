@@ -5,6 +5,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import jp.co.stcinc.kotsuhiseisan.entity.TReject;
 
+/**
+ * 差戻Facadeクラス
+ */
 @Stateless
 public class TRejectFacade extends AbstractFacade<TReject> {
 

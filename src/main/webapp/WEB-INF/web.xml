@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <!-- 環境 -->
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
@@ -14,19 +15,22 @@
         <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
         <param-value>true</param-value>
     </context-param>
-
-
-        
+    <!-- 交通費精算書の出力先相対パス  -->
     <context-param>
-        <param-name>ReportTemplate</param-name>
-        <param-value>D:/work/template.xlsx</param-value>
+        <param-name>ReportUri</param-name>
+        <param-value>../reports</param-value>
     </context-param>
+    <!-- 交通費精算書の出力先絶対パス  -->
     <context-param>
         <param-name>ReportPath</param-name>
-        <param-value>D:/work</param-value>
+        <param-value>D:/NetBeans Projects/KotsuhiSeisanWeb/src/main/webapp/reports</param-value>
     </context-param>
-    
-    
+    <!-- 交通費精算書のテンプレートファイル絶対パス -->
+    <context-param>
+        <param-name>ReportTemplate</param-name>
+        <param-value>D:/NetBeans Projects/KotsuhiSeisanWeb/src/main/webapp/reports/template.xlsx</param-value>
+    </context-param>
+    <!-- JSF(Faces Servlet) -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -36,9 +40,11 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
+    <!-- セッションタイムアウト値 -->
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
+    <!-- デフォルトページ -->
     <welcome-file-list>
         <welcome-file>faces/login.xhtml</welcome-file>
     </welcome-file-list>
